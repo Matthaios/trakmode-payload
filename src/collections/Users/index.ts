@@ -1,10 +1,10 @@
 import type { CollectionConfig } from 'payload'
-import { createAccess, deleteAccess, readAccess, updateAccess } from './access'
+import { deleteAccess, readAccess, updateAccess } from './access'
 
 export const Users: CollectionConfig = {
   slug: 'users',
   access: {
-    create: createAccess,
+    create: () => true,
     read: readAccess,
     update: updateAccess,
     delete: deleteAccess,
@@ -13,6 +13,7 @@ export const Users: CollectionConfig = {
     useAsTitle: 'email',
   },
   auth: true,
+
   fields: [
     {
       name: 'role',
