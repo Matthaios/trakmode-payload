@@ -21,6 +21,14 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     components: {
+      graphics: {
+        Logo: {
+          path: '@/components/admin/logo.tsx#Logo',
+        },
+        Icon: {
+          path: '@/components/admin/icon.tsx#Icon',
+        },
+      },
       views: {
         adminLogin: {
           path: '/login',
@@ -30,6 +38,9 @@ export default buildConfig({
         },
       },
     },
+  },
+  folders: {
+    browseByFolder: false,
   },
 
   collections: [Offers, Users, Media],

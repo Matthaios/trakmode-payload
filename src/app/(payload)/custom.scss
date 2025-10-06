@@ -1,0 +1,40 @@
+@import "@payloadcms/ui/scss";
+@import '../styles/fonts/index.scss';
+
+:root {
+
+  --breakpoint-xs-width: #{$breakpoint-xs-width};
+  --breakpoint-s-width: #{$breakpoint-s-width};
+  --breakpoint-m-width: #{$breakpoint-m-width};
+  --breakpoint-l-width: #{$breakpoint-l-width};
+  --scrollbar-width: 17px;
+   --font-serif:
+    'Aileron', 'Georgia', 'Bitstream Charter', 'Charis SIL', Utopia, 'URW Bookman L', serif;
+  --font-body: 'Aileron', system-ui;
+  --font-mono: monospace;
+  --style-radius-s: 4px;
+  --style-radius-m: 8px;
+  --style-radius-l: 16px;
+  --nav-width: 16rem;
+
+  // --theme-bg: #0b0b0d;
+
+  --theme-brand: #6869de;
+}
+
+
+.nav {
+  background-color: #1a1d21;
+}
+.nav__link-indicator {
+  background-color: #6869de;
+}
+
+.nav__link {
+  font-size: 1.125rem;
+  padding-block: 0.25rem;
+}
+
+.nav__link:has(.nav__link-indicator) {
+  color: #6869de;
+}
