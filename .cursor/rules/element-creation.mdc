@@ -1,0 +1,287 @@
+---
+alwaysApply: **true**
+---
+
+# Element Creation Rules
+
+When creating new UI elements/components, follow these established conventions based on modern React patterns with class-variance-authority (cva).
+
+## File Structure & Organization
+
+### Component Location
+- Place components in `src/components/admin/ui/` for base UI components
+- Use descriptive file names in kebab-case: `button.tsx`, `input.tsx`, `card.tsx`
+- Each component should be a single file with all related code
+- Include TypeScript interfaces within the same file
+
+### File Naming
+- Use kebab-case for file names: `button.tsx`, `content-divider.tsx`
+- Use PascalCase for component names: `Button`, `ContentDivider`
+- Use camelCase for utility functions and variables
+
+## Component Structure
+
+### Modern Template with CVA
+```tsx
+'use client'
+import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from "@/lib/utils"
+
+const componentVariants = cva(
+  "base-classes-here", // Base classes that apply to all variants
+  {
+    variants: {
+      variant: {
+        default: "variant-default-classes",
+        secondary: "variant-secondary-classes",
+        destructive: "variant-destructive-classes",
+        outline: "variant-outline-classes",
+        ghost: "variant-ghost-classes",
+        link: "variant-link-classes",
+      },
+      size: {
+        default: "size-default-classes",
+        sm: "size-small-classes",
+        lg: "size-large-classes",
+        icon: "size-icon-classes",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+)
+
+export interface ComponentProps
+  extends React.ComponentProps<"div">, // Change to appropriate HTML element
+    VariantProps<typeof componentVariants> {
+  asChild?: boolean
+  // Add other specific props here
+}
+
+const Component = React.forwardRef<HTMLDivElement, ComponentProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "div" // Change to appropriate HTML element
+
+    return (
+      <Comp
+        className={cn(componentVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+
+Component.displayName = "Component"
+
+export { Component, componentVariants }
+```
+
+## Key Patterns
+
+### 1. Class Variance Authority (CVA)
+- Use `cva` for managing component variants
+- Define base classes that apply to all variants
+- Create variant objects for different styles and sizes
+- Set sensible default variants
+- Export both the component and variants for external use
+
+### 2. Radix UI Slot Pattern
+- Use `@radix-ui/react-slot` for polymorphic components
+- Support `asChild` prop for composition
+- Allow components to render as different HTML elements
+
+### 3. TypeScript Integration
+- Extend appropriate HTML element props
+- Use `VariantProps<typeof componentVariants>` for variant typing
+- Include `asChild?: boolean` for slot functionality
+- Use proper generic types for refs
+
+### 4. Utility Function
+- Use `cn` utility from `@/lib/utils` for className merging
+- Combines `clsx` and `tailwind-merge` for optimal class handling
+
+## Styling Conventions
+
+### Tailwind CSS Classes
+- Use Tailwind CSS for styling
+- Follow consistent spacing, sizing, and color patterns
+- Use semantic color tokens: `bg-primary`, `text-primary-foreground`
+- Include focus states: `focus-visible:ring-2`, `focus-visible:ring-ring`
+- Add disabled states: `disabled:opacity-50`, `disabled:pointer-events-none`
+
+### Common Base Classes
+```tsx
+// Common base classes for interactive elements
+"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+```
+
+## Import Patterns
+
+### Standard Imports Order
+```tsx
+'use client'
+import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from "@/lib/utils"
+```
+
+### Optional Imports
+- Add Lucide React icons as needed: `import { ChevronDown, Edit } from "lucide-react"`
+- Import other Radix UI primitives as needed
+- Import Next.js components if required: `import Link from "next/link"`
+
+## Component Categories
+
+### Base Components (`src/components/admin/ui/`)
+- Fundamental UI elements: buttons, inputs, cards, badges
+- Should be highly reusable and configurable
+- Use CVA for variant management
+- Support polymorphic rendering with `asChild`
+
+### Interactive Elements
+- Include proper focus management
+- Support keyboard navigation
+- Add loading and disabled states
+- Include proper ARIA attributes
+
+## Props Interface Guidelines
+
+### Required Props
+```tsx
+export interface ComponentProps
+  extends React.ComponentProps<"div">, // Change to appropriate element
+    VariantProps<typeof componentVariants> {
+  asChild?: boolean
+  className?: string // Inherited from ComponentProps
+}
+```
+
+### Common Props Patterns
+```tsx
+export interface ComponentProps
+  extends React.ComponentProps<"div">,
+    VariantProps<typeof componentVariants> {
+  asChild?: boolean
+
+  // Content
+  children?: React.ReactNode
+
+  // Behavior
+  disabled?: boolean
+  loading?: boolean
+
+  // Events
+  onClick?: (event: React.MouseEvent<HTMLElement>) => void
+
+  // Accessibility
+  'aria-label'?: string
+  'aria-describedby'?: string
+}
+```
+
+## Variant Design Patterns
+
+### Button-like Components
+```tsx
+variants: {
+  variant: {
+    default: "bg-primary text-primary-foreground hover:bg-primary/90",
+    destructive: "bg-destructive text-white hover:bg-destructive/90",
+    outline: "border bg-background shadow-xs hover:bg-accent",
+    secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+    ghost: "hover:bg-accent hover:text-accent-foreground",
+    link: "text-primary underline-offset-4 hover:underline",
+  },
+  size: {
+    default: "h-9 px-4 py-2",
+    sm: "h-8 rounded-md gap-1.5 px-3",
+    lg: "h-10 rounded-md px-6",
+    icon: "size-9",
+  },
+}
+```
+
+### Input-like Components
+```tsx
+variants: {
+  variant: {
+    default: "border border-input bg-background",
+    error: "border-destructive focus-visible:ring-destructive/20",
+  },
+  size: {
+    default: "h-9 px-3 py-1",
+    sm: "h-8 px-2 text-sm",
+    lg: "h-10 px-4",
+  },
+}
+```
+
+## Accessibility
+
+### ARIA Attributes
+- Include appropriate ARIA labels and descriptions
+- Support keyboard navigation
+- Ensure proper focus management
+- Use semantic HTML elements when possible
+
+### Focus Management
+```tsx
+// Include in base classes
+"outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+```
+
+## Testing Considerations
+
+### Component Testing
+- Make components easily testable with clear prop interfaces
+- Use data attributes for testing selectors
+- Support ref forwarding for testing
+
+### Example Test Structure
+```tsx
+// Component should be testable like this:
+<Component
+  data-testid="component"
+  variant="default"
+  size="medium"
+  onClick={mockHandler}
+>
+  Test Content
+</Component>
+```
+
+## Performance Considerations
+
+### Optimization
+- Use `React.forwardRef` for proper ref forwarding
+- Avoid creating objects/functions in render methods
+- Use `useCallback` and `useMemo` for expensive calculations when needed
+
+### Bundle Size
+- Import only necessary dependencies
+- Use tree-shaking friendly imports
+- Avoid importing entire libraries when only specific functions are needed
+
+## Examples Reference
+
+For reference implementations, check:
+- `src/components/admin/ui/button.tsx` - Current button implementation
+- `.repo/ui/src/elements/Button/` - Reference UI components
+
+## Migration from Old Pattern
+
+When updating existing components to use this pattern:
+
+1. Replace manual className concatenation with `cva`
+2. Add `VariantProps` to TypeScript interfaces
+3. Include `asChild` support with Radix UI Slot
+4. Use `cn` utility for className merging
+5. Export both component and variants
+
+Follow these patterns consistently to maintain code quality and developer experience across the project.

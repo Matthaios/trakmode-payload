@@ -11,6 +11,7 @@ export const Users: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'email',
+    hidden: ({ user }) => user?.role !== 'admin',
   },
   auth: true,
 

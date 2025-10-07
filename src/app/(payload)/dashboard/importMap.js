@@ -24,8 +24,8 @@ import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0
 import { FolderTableCell as FolderTableCell_ab83ff7e88da8d3530831f296ec4756a } from '@payloadcms/ui/rsc'
 import { FolderField as FolderField_ab83ff7e88da8d3530831f296ec4756a } from '@payloadcms/ui/rsc'
 import { FolderTypeField as FolderTypeField_3817bf644402e67bfe6577f60ef982de } from '@payloadcms/ui'
-import { Icon as Icon_da1826f893cb792d63486d6373de94c7 } from '@/components/admin/icon.tsx'
-import { Logo as Logo_6eaea4a56f7643d6351a273514423e20 } from '@/components/admin/logo.tsx'
+import { Icon as Icon_dca78de3635114d4cab9d6b24b933508 } from '@/components/admin/graphics/icon.tsx'
+import { Logo as Logo_08fd240f93a91ff3ec027844ec821561 } from '@/components/admin/graphics/logo.tsx'
 import { default as default_f91788034e12c123de8a71efb38dcd0e } from '@/collections/Users/components/Login.tsx'
 
 export const importMap = {
@@ -55,7 +55,7 @@ export const importMap = {
   "@payloadcms/ui/rsc#FolderTableCell": FolderTableCell_ab83ff7e88da8d3530831f296ec4756a,
   "@payloadcms/ui/rsc#FolderField": FolderField_ab83ff7e88da8d3530831f296ec4756a,
   "@payloadcms/ui#FolderTypeField": FolderTypeField_3817bf644402e67bfe6577f60ef982de,
-  "@/components/admin/icon.tsx#Icon": Icon_da1826f893cb792d63486d6373de94c7,
-  "@/components/admin/logo.tsx#Logo": Logo_6eaea4a56f7643d6351a273514423e20,
+  "@/components/admin/graphics/icon.tsx#Icon": Icon_dca78de3635114d4cab9d6b24b933508,
+  "@/components/admin/graphics/logo.tsx#Logo": Logo_08fd240f93a91ff3ec027844ec821561,
   "@/collections/Users/components/Login.tsx#default": default_f91788034e12c123de8a71efb38dcd0e
 }

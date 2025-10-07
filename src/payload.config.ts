@@ -6,7 +6,7 @@ import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
-
+import * as authTables from '@/db/auth-schema'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Offers } from './collections/Offers'
@@ -14,6 +14,11 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
+  routes: {
+    admin: '/dashboard',
+    api: '/api',
+  },
+
   admin: {
     user: Users.slug,
 
@@ -23,10 +28,10 @@ export default buildConfig({
     components: {
       graphics: {
         Logo: {
-          path: '@/components/admin/logo.tsx#Logo',
+          path: '@/components/admin/graphics/logo.tsx#Logo',
         },
         Icon: {
-          path: '@/components/admin/icon.tsx#Icon',
+          path: '@/components/admin/graphics/icon.tsx#Icon',
         },
       },
       views: {
@@ -53,6 +58,18 @@ export default buildConfig({
     client: {
       url: process.env.DATABASE_URI || '',
     },
+    beforeSchemaInit: [
+      // @ts-ignore
+      ({ schema }) => {
+        return {
+          ...schema,
+          tables: {
+            ...schema.tables,
+            ...authTables,
+          },
+        }
+      },
+    ],
   }),
   sharp,
   plugins: [
