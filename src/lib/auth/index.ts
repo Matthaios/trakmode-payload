@@ -12,6 +12,7 @@ export const auth = betterAuth({
     provider: 'sqlite',
     schema,
   }),
+  cookiePrefix: 'trakmode',
   secret: process.env.BETTER_AUTH_SECRET!,
   session: {
     expiresIn: 60 * 60 * 24 * 10, // 10 days
@@ -54,3 +55,5 @@ export const auth = betterAuth({
     nextCookies(),
   ],
 })
+
+export type Session = typeof auth.$Infer.Session

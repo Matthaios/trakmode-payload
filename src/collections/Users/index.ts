@@ -1,5 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { deleteAccess, readAccess, updateAccess } from './access'
+import { meEndpoint } from './endpoints/me'
+import { betterAuthStrategy } from './strategies/better-auth'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -13,9 +15,24 @@ export const Users: CollectionConfig = {
     useAsTitle: 'email',
     hidden: ({ user }) => user?.role !== 'admin',
   },
-  auth: true,
+  auth: {
+    disableLocalStrategy: true,
+    strategies: [betterAuthStrategy],
+  },
+  endpoints: [meEndpoint],
 
   fields: [
+    {
+      name: 'name',
+      type: 'text',
+    },
+    {
+      name: 'email',
+      type: 'email',
+      admin: {
+        readOnly: true,
+      },
+    },
     {
       name: 'role',
       type: 'select',

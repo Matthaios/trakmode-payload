@@ -1,13 +1,14 @@
 'use client'
 
-import { Button } from '@/components/admin/ui/button'
-import { ContentDivider } from '@/components/admin/ui/content-divider'
-import { Input } from '@/components/admin/ui/input'
-import { SocialButton } from '@/components/admin/ui/social-button'
+import { ContentDivider } from '@/components/untitled/application/content-divider/content-divider'
+import { Button } from '@/components/untitled/base/buttons/button'
+import { SocialButton } from '@/components/untitled/base/buttons/social-button'
+import { Form } from '@/components/untitled/base/form/form'
+import { Input } from '@/components/untitled/base/input/input'
 import { authClient } from '@/lib/auth/client'
 import { useState } from 'react'
 
-export default function LoginPage() {
+export const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
 
@@ -22,7 +23,7 @@ export default function LoginPage() {
       const { data, error } = await authClient.signIn.magicLink({
         email,
         callbackURL: '/',
-        newUserCallbackURL: '/welcome',
+        newUserCallbackURL: '/dashboard',
         errorCallbackURL: '/error',
       })
 
@@ -73,7 +74,7 @@ export default function LoginPage() {
           </div>
 
           <div className="z-10 flex justify-center">
-            <Button size="medium" buttonStyle="secondary" onClick={() => setEmailSent(false)}>
+            <Button color="link-color" size="md" onClick={() => setEmailSent(false)}>
               Back to login
             </Button>
           </div>
@@ -83,8 +84,8 @@ export default function LoginPage() {
   }
 
   return (
-    <section className="relative min-h-screen overflow-hidden  px-4 py-12 md:px-8 md:pt-24">
-      <div className="relative h-full justify-center z-10 mx-auto flex w-full flex-col gap-8 sm:max-w-90">
+    <section className="relative min-h-screen overflow-hidden bg-primary px-4 py-12 md:px-8 md:pt-24">
+      <div className="relative z-10 mx-auto flex w-full flex-col gap-8 sm:max-w-90">
         <div className="flex flex-col items-center gap-6 text-center">
           <div className="z-10 flex flex-col gap-2 md:gap-3">
             <h1 className="text-display-xs font-semibold text-primary md:text-display-sm">
@@ -94,17 +95,18 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <form onSubmit={handleEmailSubmit} className="z-10 flex flex-col gap-6">
+        <Form onSubmit={handleEmailSubmit} className="z-10 flex flex-col gap-6">
           <div className="flex flex-col gap-4">
             <Input
-              size={'lg'}
+              isRequired
               type="email"
               name="email"
               placeholder="Enter your email"
+              size="md"
               disabled={isLoading}
             />
 
-            <Button type="submit" size="large" disabled={isLoading}>
+            <Button type="submit" size="lg" disabled={isLoading}>
               {isLoading ? 'Sending...' : 'Continue with email'}
             </Button>
           </div>
@@ -123,7 +125,7 @@ export default function LoginPage() {
               Continue with Google
             </SocialButton>
           </div>
-        </form>
+        </Form>
       </div>
     </section>
   )
