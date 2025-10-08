@@ -53,3 +53,4 @@ node_modules/
 
 # Payload Local Files
 .repo/
+*.db

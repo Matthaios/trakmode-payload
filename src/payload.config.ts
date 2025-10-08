@@ -1,15 +1,14 @@
 // storage-adapter-import-placeholder
+import * as authTables from '@/db/auth-schema'
+import { Media } from '@/payload/collections/Media'
+import { Offers } from '@/payload/collections/Offers'
+import { Users } from '@/payload/collections/Users'
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
-import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { buildConfig } from 'payload'
-import { fileURLToPath } from 'url'
 import sharp from 'sharp'
-import * as authTables from '@/db/auth-schema'
-import { Users } from './collections/Users'
-import { Media } from './collections/Media'
-import { Offers } from './collections/Offers'
+import { fileURLToPath } from 'url'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -20,26 +19,29 @@ export default buildConfig({
   },
 
   admin: {
+    meta: {
+      title: 'Trakmode',
+      applicationName: 'Trakmode',
+      assets: ['/assets/favicon.svg'],
+    },
     user: Users.slug,
 
     importMap: {
       baseDir: path.resolve(dirname),
     },
+
     components: {
-      graphics: {
-        Logo: {
-          path: '@/components/admin/graphics/logo.tsx#Logo',
-        },
-        Icon: {
-          path: '@/components/admin/graphics/icon.tsx#Icon',
+      logout: {
+        Button: {
+          path: '@/payload/components/admin/logout/LogoutButton.tsx#LogoutButton',
         },
       },
-      views: {
-        adminLogin: {
-          path: '/login',
-          Component: {
-            path: '@/collections/Users/components/Login.tsx',
-          },
+      graphics: {
+        Logo: {
+          path: '@/payload/components/admin/graphics/logo.tsx#Logo',
+        },
+        Icon: {
+          path: '@/payload/components/admin/graphics/icon.tsx#Icon',
         },
       },
     },
@@ -72,8 +74,6 @@ export default buildConfig({
     ],
   }),
   sharp,
-  plugins: [
-    payloadCloudPlugin(),
-    // storage-adapter-placeholder
-  ],
+  telemetry: false,
+  plugins: [],
 })

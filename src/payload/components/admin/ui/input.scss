@@ -1,0 +1,187 @@
+// Input component styles based on Payload UI formInput mixin
+@import '../../../app/(payload)/custom.scss';
+
+// Base input styles matching Payload UI formInput mixin
+.input {
+  // Base form input styles from Payload UI
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+  font-family: var(--font-body, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  width: 100%;
+  border: 1px solid var(--theme-elevation-150, #e5e5e5);
+  border-radius: var(--style-radius-s, 4px);
+  background: var(--theme-input-bg, #ffffff);
+  color: var(--theme-elevation-800, #333333);
+  font-size: 1rem;
+  height: 2rem; // base(2) equivalent
+  line-height: 1rem; // base(1) equivalent
+  padding: 0.4rem 0.75rem; // base(0.4) base(0.75) equivalent
+  -webkit-appearance: none;
+  transition-property: border, box-shadow, background-color;
+  transition-duration: 100ms, 100ms, 500ms;
+  transition-timing-function: cubic-bezier(0, 0.2, 0.2, 1);
+
+  &[data-rtl='true'] {
+    direction: rtl;
+  }
+
+  &::-webkit-input-placeholder {
+    color: var(--theme-elevation-400, #999999);
+    font-weight: normal;
+    font-size: 1rem;
+  }
+
+  &::-moz-placeholder {
+    color: var(--theme-elevation-400, #999999);
+    font-weight: normal;
+    font-size: 1rem;
+  }
+
+  &:hover:not(:disabled) {
+    border-color: var(--theme-elevation-250, #d1d1d1);
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.2);
+  }
+
+  &:focus,
+  &:focus-within,
+  &:active {
+    border-color: var(--theme-elevation-400, #999999);
+    outline: 0;
+  }
+
+  // Size variants
+  &--size-sm {
+    height: 1.75rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  &--size-lg {
+    height: 2.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 1.125rem;
+  }
+
+  // Error state
+  &--error {
+    background-color: var(--theme-error-50, #fef2f2);
+    border: 1px solid var(--theme-error-500, #ef4444);
+
+    &:hover {
+      border-color: var(--theme-error-500, #ef4444);
+    }
+
+    &:focus,
+    &:focus-within,
+    &:active {
+      border-color: var(--theme-error-500, #ef4444);
+    }
+  }
+
+  // Read-only/disabled state
+  &--read-only,
+  &:disabled {
+    background: var(--theme-elevation-100, #f5f5f5);
+    color: var(--theme-elevation-400, #999999);
+    box-shadow: none;
+    cursor: not-allowed;
+
+    &:hover {
+      border-color: var(--theme-elevation-150, #e5e5e5);
+      box-shadow: none;
+    }
+  }
+}
+
+// Input field wrapper for label, description, and error
+.input-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  &__label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--theme-elevation-800, #333333);
+    margin-bottom: 0.25rem;
+  }
+
+  &__required {
+    color: var(--theme-error-500, #ef4444);
+    margin-left: 0.25rem;
+  }
+
+  &__description {
+    font-size: 0.75rem;
+    color: var(--theme-elevation-500, #666666);
+    margin-top: 0.25rem;
+  }
+
+  &__error {
+    font-size: 0.75rem;
+    color: var(--theme-error-500, #ef4444);
+    margin-top: 0.25rem;
+  }
+}
+
+// Dark theme support
+html[data-theme='dark'] {
+  .input {
+    border-color: var(--theme-elevation-150, #404040);
+    background: var(--theme-input-bg, #1a1a1a);
+    color: var(--theme-elevation-800, #e5e5e5);
+
+    &::-webkit-input-placeholder,
+    &::-moz-placeholder {
+      color: var(--theme-elevation-400, #666666);
+    }
+
+    &:hover:not(:disabled) {
+      border-color: var(--theme-elevation-250, #525252);
+    }
+
+    &:focus,
+    &:focus-within,
+    &:active {
+      border-color: var(--theme-elevation-400, #666666);
+    }
+
+    &--error {
+      background-color: var(--theme-error-100, #2d1b1b);
+      border: 1px solid var(--theme-error-400, #f87171);
+
+      &:hover {
+        border-color: var(--theme-error-400, #f87171);
+      }
+
+      &:focus,
+      &:focus-within,
+      &:active {
+        border-color: var(--theme-error-400, #f87171);
+      }
+    }
+
+    &--read-only,
+    &:disabled {
+      background: var(--theme-elevation-100, #2a2a2a);
+      color: var(--theme-elevation-400, #666666);
+
+      &:hover {
+        border-color: var(--theme-elevation-150, #404040);
+      }
+    }
+  }
+
+  .input-field {
+    &__label {
+      color: var(--theme-elevation-800, #e5e5e5);
+    }
+
+    &__description {
+      color: var(--theme-elevation-500, #999999);
+    }
+
+    &__error {
+      color: var(--theme-error-400, #f87171);
+    }
+  }
+}

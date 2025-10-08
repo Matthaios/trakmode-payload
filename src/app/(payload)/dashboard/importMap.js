@@ -24,9 +24,9 @@ import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0
 import { FolderTableCell as FolderTableCell_ab83ff7e88da8d3530831f296ec4756a } from '@payloadcms/ui/rsc'
 import { FolderField as FolderField_ab83ff7e88da8d3530831f296ec4756a } from '@payloadcms/ui/rsc'
 import { FolderTypeField as FolderTypeField_3817bf644402e67bfe6577f60ef982de } from '@payloadcms/ui'
-import { Icon as Icon_dca78de3635114d4cab9d6b24b933508 } from '@/components/admin/graphics/icon.tsx'
-import { Logo as Logo_08fd240f93a91ff3ec027844ec821561 } from '@/components/admin/graphics/logo.tsx'
-import { default as default_f91788034e12c123de8a71efb38dcd0e } from '@/collections/Users/components/Login.tsx'
+import { LogoutButton as LogoutButton_6f9b744b495d9c8d8c72cba2c2ec573c } from '@/payload/components/admin/logout/LogoutButton.tsx'
+import { Icon as Icon_9e3646e967d276fc292d2d8148eb0ee8 } from '@/payload/components/admin/graphics/icon.tsx'
+import { Logo as Logo_7e47fe2f6d594c22c58c4d502c803ef3 } from '@/payload/components/admin/graphics/logo.tsx'
 
 export const importMap = {
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
@@ -55,7 +55,7 @@ export const importMap = {
   "@payloadcms/ui/rsc#FolderTableCell": FolderTableCell_ab83ff7e88da8d3530831f296ec4756a,
   "@payloadcms/ui/rsc#FolderField": FolderField_ab83ff7e88da8d3530831f296ec4756a,
   "@payloadcms/ui#FolderTypeField": FolderTypeField_3817bf644402e67bfe6577f60ef982de,
-  "@/components/admin/graphics/icon.tsx#Icon": Icon_dca78de3635114d4cab9d6b24b933508,
-  "@/components/admin/graphics/logo.tsx#Logo": Logo_08fd240f93a91ff3ec027844ec821561,
-  "@/collections/Users/components/Login.tsx#default": default_f91788034e12c123de8a71efb38dcd0e
+  "@/payload/components/admin/logout/LogoutButton.tsx#LogoutButton": LogoutButton_6f9b744b495d9c8d8c72cba2c2ec573c,
+  "@/payload/components/admin/graphics/icon.tsx#Icon": Icon_9e3646e967d276fc292d2d8148eb0ee8,
+  "@/payload/components/admin/graphics/logo.tsx#Logo": Logo_7e47fe2f6d594c22c58c4d502c803ef3
 }

@@ -1,0 +1,90 @@
+import type { CollectionConfig } from 'payload'
+import { meEndpoint } from './endpoints/me'
+import { betterAuthStrategy } from './strategies/better-auth'
+import { isAdmin, isAdminFieldAccess, isAdminOrSelf } from './access'
+import { generatePreviewPath } from '@/payload/utils/generate-preview-path'
+
+import { formatSlugHook } from '@/payload/fields/slug/formatSlug'
+
+export const Users: CollectionConfig = {
+  slug: 'users',
+
+  access: {
+    create: isAdmin,
+    read: isAdminOrSelf,
+    update: isAdminOrSelf,
+    delete: isAdmin,
+  },
+
+  admin: {
+    hideAPIURL: true,
+    useAsTitle: 'name',
+
+    livePreview: {
+      url: ({ data }) => {
+        const path = generatePreviewPath({
+          slug: typeof data?.username === 'string' ? data.username : '',
+          collection: 'users',
+        })
+
+        return `${process.env.NEXT_PUBLIC_SERVER_URL}${path}`
+      },
+    },
+    preview: (data) => {
+      const path = generatePreviewPath({
+        slug: typeof data?.username === 'string' ? data.username : '',
+        collection: 'users',
+      })
+
+      return `${process.env.NEXT_PUBLIC_SERVER_URL}${path}`
+    },
+  },
+  auth: {
+    disableLocalStrategy: true,
+
+    strategies: [betterAuthStrategy],
+  },
+  endpoints: [meEndpoint],
+
+  fields: [
+    {
+      name: 'name',
+      type: 'text',
+    },
+    {
+      name: 'username',
+      type: 'text',
+      admin: {
+        position: 'sidebar',
+      },
+      hooks: {
+        beforeValidate: [formatSlugHook('name')],
+      },
+      unique: true,
+      required: true,
+    },
+    {
+      name: 'email',
+      type: 'email',
+
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+      },
+    },
+    { name: 'Bio', type: 'richText' },
+    {
+      name: 'role',
+      type: 'select',
+      saveToJWT: true,
+      options: ['admin', 'creator', 'user'],
+      admin: {
+        position: 'sidebar',
+      },
+      defaultValue: 'user',
+      access: {
+        update: isAdminFieldAccess,
+      },
+    },
+  ],
+}

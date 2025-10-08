@@ -5,6 +5,10 @@ import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { nextCookies } from 'better-auth/next-js'
 import { magicLink, openAPI, twoFactor } from 'better-auth/plugins'
+import { getPayload } from 'payload'
+
+import payloadConfig from '@/payload.config'
+import { formatSlug } from '@/payload/fields/slug/formatSlug'
 
 // your drizzle instance
 export const auth = betterAuth({
@@ -23,6 +27,27 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     },
   },
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user) => {
+          console.log('user', user)
+          const payload = await getPayload({ config: payloadConfig })
+          await payload.create({
+            collection: 'users',
+            data: {
+              email: user.email,
+              name: user.name,
+              username: formatSlug(
+                (user.name || user?.email?.split('@')[0] || '') +
+                  Math.random().toString(36).substring(2, 15),
+              ),
+            },
+          })
+        },
+      },
+    },
+  },
   emailAndPassword: {
     enabled: false,
   },
@@ -36,11 +61,9 @@ export const auth = betterAuth({
       return await redis.get(key)
     },
     set: async (key, value) => {
-      console.log('redisset', key, value)
       return await redis.set(key, value)
     },
     delete: async (key) => {
-      console.log('redisdelete', key)
       await redis.del(key)
     },
   },
