@@ -42,3 +42,10 @@ html {
 .nav__link:has(.nav__link-indicator) {
   color: #6869de;
 }
+
+// Hide settings for users /account page
+.collection-edit--users {
+  .payload-settings {
+    display: none !important;
+  }
+}

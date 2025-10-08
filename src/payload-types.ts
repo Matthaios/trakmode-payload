@@ -155,6 +155,8 @@ export interface User {
   name?: string | null;
   username: string;
   email?: string | null;
+  avatar?: (number | null) | Media;
+  cover?: (number | null) | Media;
   Bio?: {
     root: {
       type: string;
@@ -303,6 +305,8 @@ export interface UsersSelect<T extends boolean = true> {
   name?: T;
   username?: T;
   email?: T;
+  avatar?: T;
+  cover?: T;
   Bio?: T;
   role?: T;
   updatedAt?: T;

@@ -38,7 +38,6 @@ export const LoginSimpleSocialLogins = () => {
           onSubmit={(e) => {
             e.preventDefault()
             const data = Object.fromEntries(new FormData(e.currentTarget))
-            console.log('Form data:', data)
           }}
           className="z-10 flex flex-col gap-6"
         >

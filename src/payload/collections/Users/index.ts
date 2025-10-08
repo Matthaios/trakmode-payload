@@ -19,6 +19,9 @@ export const Users: CollectionConfig = {
   admin: {
     hideAPIURL: true,
     useAsTitle: 'name',
+    hidden: ({ user }) => {
+      return user?.role !== 'admin'
+    },
 
     livePreview: {
       url: ({ data }) => {
@@ -31,10 +34,7 @@ export const Users: CollectionConfig = {
       },
     },
     preview: (data) => {
-      const path = generatePreviewPath({
-        slug: typeof data?.username === 'string' ? data.username : '',
-        collection: 'users',
-      })
+      const path = '/profile/' + data?.username
 
       return `${process.env.NEXT_PUBLIC_SERVER_URL}${path}`
     },
@@ -72,6 +72,8 @@ export const Users: CollectionConfig = {
         readOnly: true,
       },
     },
+    { name: 'avatar', type: 'upload', relationTo: 'media' },
+    { name: 'cover', type: 'upload', relationTo: 'media' },
     { name: 'Bio', type: 'richText' },
     {
       name: 'role',

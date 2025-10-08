@@ -5,10 +5,8 @@ import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { nextCookies } from 'better-auth/next-js'
 import { magicLink, openAPI, twoFactor } from 'better-auth/plugins'
-import { getPayload } from 'payload'
 
-import payloadConfig from '@/payload.config'
-import { formatSlug } from '@/payload/fields/slug/formatSlug'
+import { createNewUser } from '@/payload/collections/Users/actions/create-new-user'
 
 // your drizzle instance
 export const auth = betterAuth({
@@ -31,19 +29,7 @@ export const auth = betterAuth({
     user: {
       create: {
         after: async (user) => {
-          console.log('user', user)
-          const payload = await getPayload({ config: payloadConfig })
-          await payload.create({
-            collection: 'users',
-            data: {
-              email: user.email,
-              name: user.name,
-              username: formatSlug(
-                (user.name || user?.email?.split('@')[0] || '') +
-                  Math.random().toString(36).substring(2, 15),
-              ),
-            },
-          })
+          await createNewUser(user)
         },
       },
     },
@@ -55,18 +41,18 @@ export const auth = betterAuth({
     modelName: 'auth_users',
   },
 
-  secondaryStorage: {
-    get: async (key) => {
-      console.log('redisget', key)
-      return await redis.get(key)
-    },
-    set: async (key, value) => {
-      return await redis.set(key, value)
-    },
-    delete: async (key) => {
-      await redis.del(key)
-    },
-  },
+  // secondaryStorage: {
+  //   get: async (key) => {
+  //     console.log('redisget', key)
+  //     return await redis.get(key)
+  //   },
+  //   set: async (key, value) => {
+  //     return await redis.set(key, value)
+  //   },
+  //   delete: async (key) => {
+  //     await redis.del(key)
+  //   },
+  // },
   plugins: [
     twoFactor({}),
     magicLink({

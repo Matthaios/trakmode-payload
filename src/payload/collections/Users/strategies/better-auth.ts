@@ -1,6 +1,7 @@
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
 import type { AuthStrategyFunctionArgs, AuthStrategy } from 'payload'
+import { createNewUser } from '../actions/create-new-user'
 
 export const betterAuthStrategy: AuthStrategy = {
   name: 'better-auth',
@@ -21,7 +22,19 @@ export const betterAuthStrategy: AuthStrategy = {
         },
       },
     })
-    const user = docs?.[0] || null
+    let user = docs?.[0] || null
+    if (!user) {
+      await createNewUser(session?.user)
+      const { docs } = await payload.find({
+        collection: 'users',
+        where: {
+          email: {
+            equals: session?.user?.email,
+          },
+        },
+      })
+      user = docs?.[0] || null
+    }
 
     return {
       user: {

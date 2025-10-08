@@ -8,6 +8,9 @@ const nextConfig = {
       fullUrl: true,
     },
   },
+  experimental: {
+    optimizePackageImports: ['@untitledui/icons'],
+  },
   // Your Next.js config here
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
