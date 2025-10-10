@@ -27,6 +27,7 @@ import { FolderTypeField as FolderTypeField_3817bf644402e67bfe6577f60ef982de } f
 import { LogoutButton as LogoutButton_6f9b744b495d9c8d8c72cba2c2ec573c } from '@/payload/components/admin/logout/LogoutButton.tsx'
 import { Icon as Icon_9e3646e967d276fc292d2d8148eb0ee8 } from '@/payload/components/admin/graphics/icon.tsx'
 import { Logo as Logo_7e47fe2f6d594c22c58c4d502c803ef3 } from '@/payload/components/admin/graphics/logo.tsx'
+import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24 } from '@payloadcms/storage-s3/client'
 
 export const importMap = {
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
@@ -57,5 +58,6 @@ export const importMap = {
   "@payloadcms/ui#FolderTypeField": FolderTypeField_3817bf644402e67bfe6577f60ef982de,
   "@/payload/components/admin/logout/LogoutButton.tsx#LogoutButton": LogoutButton_6f9b744b495d9c8d8c72cba2c2ec573c,
   "@/payload/components/admin/graphics/icon.tsx#Icon": Icon_9e3646e967d276fc292d2d8148eb0ee8,
-  "@/payload/components/admin/graphics/logo.tsx#Logo": Logo_7e47fe2f6d594c22c58c4d502c803ef3
+  "@/payload/components/admin/graphics/logo.tsx#Logo": Logo_7e47fe2f6d594c22c58c4d502c803ef3,
+  "@payloadcms/storage-s3/client#S3ClientUploadHandler": S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24
 }

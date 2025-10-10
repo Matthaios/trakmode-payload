@@ -2,17 +2,27 @@
 import * as authTables from '@/db/auth-schema'
 import { Media } from '@/payload/collections/Media'
 import { Offers } from '@/payload/collections/Offers'
+import { PrivateAssets } from '@/payload/collections/PrivateAssets'
 import { Users } from '@/payload/collections/Users'
+import { storage } from '@/payload/plugins/storage'
+import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+
 import path from 'path'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
+import { TrakmodeTenantPlugin } from './payload/plugins/tenant'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
-
 export default buildConfig({
+  bin: [
+    {
+      key: 'db:clear',
+      scriptPath: path.resolve(dirname, 'src/scripts/clear-db.ts'),
+    },
+  ],
   routes: {
     admin: '/dashboard',
     api: '/api',
@@ -48,32 +58,19 @@ export default buildConfig({
   },
   folders: {
     browseByFolder: false,
+    slug: 'folders',
   },
 
-  collections: [Offers, Users, Media],
+  collections: [Offers, Users, Media, PrivateAssets],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  db: sqliteAdapter({
-    client: {
-      url: process.env.DATABASE_URI || '',
-    },
-    beforeSchemaInit: [
-      // @ts-ignore
-      ({ schema }) => {
-        return {
-          ...schema,
-          tables: {
-            ...schema.tables,
-            ...authTables,
-          },
-        }
-      },
-    ],
+  db: mongooseAdapter({
+    url: process.env.DEVELOPMENT_MONGO_URI!,
   }),
   sharp,
   telemetry: false,
-  plugins: [],
+  plugins: [storage, TrakmodeTenantPlugin],
 })

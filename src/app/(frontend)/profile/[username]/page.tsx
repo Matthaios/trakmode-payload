@@ -50,12 +50,8 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
       <div className="relative flex flex-col items-center bg-primary px-1 pt-1">
         {/* Cover Image */}
         <div
-          className="h-40 w-full rounded-xl bg-gradient-to-t from-[#FBC5EC] to-[#A5C0EE] lg:h-60"
+          className="h-40 w-full relative rounded-xl bg-gradient-to-t from-[#FBC5EC] to-[#A5C0EE] lg:h-60"
           style={{
-            backgroundImage:
-              user.cover && typeof user.cover === 'object' && 'url' in user.cover
-                ? `url(${user.cover.url})`
-                : undefined,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
@@ -89,8 +85,8 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
               size="lg"
               src={
                 user.avatar && typeof user.avatar === 'object' && 'url' in user.avatar
-                  ? user.avatar.url
-                  : 'https://www.untitledui.com/images/avatars/olivia-rhye?fm=webp&q=80'
+                  ? user.avatar.sizes?.thumbnail?.url
+                  : (user?.avatar?.url as string)
               }
               alt={user.name || username}
             />

@@ -9,13 +9,12 @@ export const findOrCreateUser = async (user: Session['user']) => {
   const { docs } = await payload.find({
     collection: 'users',
     where: {
-      email: {
-        equals: user.email,
+      authId: {
+        equals: user.id,
       },
     },
     limit: 1,
   })
-
   if (docs.length > 0) {
     return docs[0]
   }

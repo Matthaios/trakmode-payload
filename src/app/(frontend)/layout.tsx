@@ -10,7 +10,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
 
   return (
     <html lang="en" className="dark-mode">
-      <body className="dark-mode bg-primary min-h-screen">
+      <body className="  bg-primary text-primary min-h-screen">
         <main>{children}</main>
       </body>
     </html>

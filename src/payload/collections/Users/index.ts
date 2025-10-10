@@ -52,10 +52,23 @@ export const Users: CollectionConfig = {
       type: 'text',
     },
     {
+      name: 'authId',
+      type: 'text',
+      admin: {
+        hidden: true,
+        position: 'sidebar',
+      },
+
+      required: true,
+    },
+    {
       name: 'username',
       type: 'text',
       admin: {
         position: 'sidebar',
+
+        description:
+          "WARNING: Changing this will change the url of your profle. Don't do it if not necessary.",
       },
       hooks: {
         beforeValidate: [formatSlugHook('name')],
