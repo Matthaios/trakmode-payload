@@ -5,6 +5,7 @@ import { isAdmin, isAdminFieldAccess, isAdminOrSelf } from './access'
 import { generatePreviewPath } from '@/payload/utils/generate-preview-path'
 
 import { formatSlugHook } from '@/payload/fields/slug/formatSlug'
+import { getServerSideURL } from '@/utils/getURL'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -30,13 +31,13 @@ export const Users: CollectionConfig = {
           collection: 'users',
         })
 
-        return `${process.env.NEXT_PUBLIC_SERVER_URL}${path}`
+        return `${getServerSideURL()}${path}`
       },
     },
     preview: (data) => {
       const path = '/profile/' + data?.username
 
-      return `${process.env.NEXT_PUBLIC_SERVER_URL}${path}`
+      return `${getServerSideURL()}${path}`
     },
   },
   auth: {
