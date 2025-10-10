@@ -25,7 +25,7 @@ export function TrakmodeTenantPlugin(config: Config): Config {
   return {
     ...config,
     collections: (config.collections || []).map((collection) => {
-      if (['media'].includes(collection.slug)) {
+      if (['media', 'private', 'offers'].includes(collection.slug)) {
         return addTenantField({
           ...collection,
           admin: {

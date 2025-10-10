@@ -6,6 +6,7 @@ import { nextCookies } from 'better-auth/next-js'
 import { magicLink, openAPI, twoFactor } from 'better-auth/plugins'
 
 import { createNewUser } from '@/payload/collections/Users/actions/create-new-user'
+import { env } from '@/env'
 
 // your drizzle instance
 export const auth = betterAuth({
@@ -14,14 +15,14 @@ export const auth = betterAuth({
     schema,
   }),
   cookiePrefix: 'trakmode',
-  secret: process.env.BETTER_AUTH_SECRET!,
+  secret: env.BETTER_AUTH_SECRET,
   session: {
     expiresIn: 60 * 60 * 24 * 10, // 10 days
   },
   socialProviders: {
     google: {
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
     },
   },
   databaseHooks: {

@@ -5,7 +5,7 @@ import { Button } from '@/components/untitled/base/buttons/button'
 import { SocialButton } from '@/components/untitled/base/buttons/social-button'
 import { Form } from '@/components/untitled/base/form/form'
 import { Input } from '@/components/untitled/base/input/input'
-import { authClient } from '@/lib/auth/client'
+import { authClient } from '@/services/auth/client'
 import { useState } from 'react'
 
 export const LoginPage = () => {

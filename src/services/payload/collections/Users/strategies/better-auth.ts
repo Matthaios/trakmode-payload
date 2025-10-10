@@ -1,4 +1,4 @@
-import { auth } from '@/lib/auth'
+import { auth } from '@/services/auth'
 import { headers } from 'next/headers'
 import type { AuthStrategyFunctionArgs, AuthStrategy } from 'payload'
 import { createNewUser } from '../actions/create-new-user'

@@ -1,5 +1,5 @@
 'use client'
-import { authClient } from '@/lib/auth/client'
+import { authClient } from '@/services/auth/client'
 import { Button, LogOutIcon } from '@payloadcms/ui'
 import { useRouter } from 'next/navigation'
 

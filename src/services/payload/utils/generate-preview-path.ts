@@ -1,5 +1,5 @@
 import { CollectionSlug } from 'payload'
-
+import { env } from '@/env'
 const collectionPrefixMap: Partial<Record<CollectionSlug, string>> = {
   offers: '/offers',
   users: '/profile',
@@ -17,7 +17,7 @@ export const generatePreviewPath = ({ collection, slug }: Props) => {
     slug,
     collection,
     path,
-    previewSecret: process.env.PREVIEW_SECRET || '',
+    previewSecret: env.PREVIEW_SECRET,
   }
 
   const encodedParams = new URLSearchParams()

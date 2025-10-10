@@ -2,6 +2,48 @@
 @import "./theme.css";
 @import "./typography.css";
 
+/* Custom Trakmode Landing Page Styles */
+.trakmode-gradient {
+  background: linear-gradient(135deg, #0B0B0D 0%, #1A1D21 100%);
+}
+
+.trakmode-purple-glow {
+  box-shadow: 0 0 20px rgba(104, 105, 222, 0.3);
+}
+
+.trakmode-card-hover {
+  transition: all 0.3s ease;
+}
+
+.trakmode-card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1A1D21;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #6869DE;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6869DE;
+  opacity: 0.8;
+}
+
 @plugin "@tailwindcss/typography";
 @plugin "tailwindcss-react-aria-components";
 @plugin "tailwindcss-animate";

@@ -1,9 +1,10 @@
+import { isAdmin, isAdminOrSelf } from '@/payload/access/collections'
+import { generatePreviewPath } from '@/payload/utils/generate-preview-path'
 import type { CollectionConfig } from 'payload'
 import { meEndpoint } from './endpoints/me'
 import { betterAuthStrategy } from './strategies/better-auth'
-import { isAdmin, isAdminFieldAccess, isAdminOrSelf } from './access'
-import { generatePreviewPath } from '@/payload/utils/generate-preview-path'
 
+import { isAdminField } from '@/payload/access/fields'
 import { formatSlugHook } from '@/payload/fields/slug/formatSlug'
 import { getServerSideURL } from '@/utils/getURL'
 
@@ -99,7 +100,8 @@ export const Users: CollectionConfig = {
       },
       defaultValue: 'user',
       access: {
-        update: isAdminFieldAccess,
+        create: isAdminField,
+        update: isAdminField,
       },
     },
   ],

@@ -1,7 +1,7 @@
 import payloadConfig from '@/payload.config'
 import { getPayload } from 'payload'
 import { createNewUser } from './create-new-user'
-import { Session } from '@/lib/auth'
+import { Session } from '@/services/auth'
 
 export const findOrCreateUser = async (user: Session['user']) => {
   const payload = await getPayload({ config: payloadConfig })

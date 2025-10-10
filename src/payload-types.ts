@@ -147,6 +147,7 @@ export interface Offer {
     [k: string]: unknown;
   } | null;
   files?: (string | Media)[] | null;
+  tenantId?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -269,6 +270,7 @@ export interface Private {
   id: string;
   alt?: string | null;
   prefix?: string | null;
+  tenantId?: string | null;
   folder?: (string | null) | FolderInterface;
   updatedAt: string;
   createdAt: string;
@@ -394,6 +396,7 @@ export interface OffersSelect<T extends boolean = true> {
   cover?: T;
   description?: T;
   files?: T;
+  tenantId?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -516,6 +519,7 @@ export interface MediaSelect<T extends boolean = true> {
 export interface PrivateSelect<T extends boolean = true> {
   alt?: T;
   prefix?: T;
+  tenantId?: T;
   folder?: T;
   updatedAt?: T;
   createdAt?: T;

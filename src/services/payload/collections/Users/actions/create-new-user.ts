@@ -1,4 +1,4 @@
-import { Session } from '@/lib/auth'
+import { Session } from '@/services/auth'
 import payloadConfig from '@/payload.config'
 
 import { getPayload } from 'payload'

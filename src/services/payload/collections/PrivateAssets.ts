@@ -1,16 +1,15 @@
-import { isAdmin } from '@/payload/collections/Users/access'
 import type { CollectionConfig } from 'payload'
-import { bo_update_user_prefix } from './Media/hooks/beforeOperation'
-
+import { isAdminOrOwner } from '../access/collections'
 export const PrivateAssets: CollectionConfig = {
   slug: 'private',
+  labels: {
+    singular: 'File',
+    plural: 'Files',
+  },
   access: {
-    read: isAdmin,
+    read: isAdminOrOwner,
   },
-  admin: {},
-  hooks: {
-    beforeOperation: [bo_update_user_prefix],
-  },
+
   folders: true,
   fields: [
     {

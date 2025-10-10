@@ -1,5 +1,5 @@
 import { s3Storage } from '@payloadcms/storage-s3'
-
+import { env } from '@/env'
 export const storage = s3Storage({
   acl: 'private',
   collections: {
@@ -13,16 +13,16 @@ export const storage = s3Storage({
       },
     },
   },
-  bucket: process.env.R2_BUCKET!,
+  bucket: env.R2_BUCKET,
   clientUploads: true,
 
   config: {
-    endpoint: process.env.R2_ENDPOINT!,
-    region: process.env.R2_REGION!,
+    endpoint: env.R2_ENDPOINT,
+    region: env.R2_REGION,
 
     credentials: {
-      accessKeyId: process.env.R2_ACCESS_KEY!,
-      secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
+      accessKeyId: env.R2_ACCESS_KEY,
+      secretAccessKey: env.R2_SECRET_ACCESS_KEY,
     },
   },
 })

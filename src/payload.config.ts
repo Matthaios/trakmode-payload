@@ -1,19 +1,17 @@
 // storage-adapter-import-placeholder
-import * as authTables from '@/db/auth-schema'
 import { Media } from '@/payload/collections/Media'
 import { Offers } from '@/payload/collections/Offers'
 import { PrivateAssets } from '@/payload/collections/PrivateAssets'
 import { Users } from '@/payload/collections/Users'
 import { storage } from '@/payload/plugins/storage'
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
-import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-
+import { env } from '@/env'
 import path from 'path'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
-import { TrakmodeTenantPlugin } from './payload/plugins/tenant'
+import { TrakmodeTenantPlugin } from '@/payload/plugins/tenant'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 export default buildConfig({
@@ -63,12 +61,12 @@ export default buildConfig({
 
   collections: [Offers, Users, Media, PrivateAssets],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: env.PAYLOAD_SECRET,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   db: mongooseAdapter({
-    url: process.env.DEVELOPMENT_MONGO_URI!,
+    url: env.DEVELOPMENT_MONGO_URI,
   }),
   sharp,
   telemetry: false,

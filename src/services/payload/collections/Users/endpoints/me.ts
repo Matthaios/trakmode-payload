@@ -1,4 +1,4 @@
-import { auth } from '@/lib/auth'
+import { auth } from '@/services/auth'
 import { headers } from 'next/headers'
 import { Endpoint } from 'payload'
 import { findOrCreateUser } from '../actions/find-or-create-user'
