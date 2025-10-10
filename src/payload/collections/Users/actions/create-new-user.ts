@@ -9,7 +9,7 @@ const adminEmails = ['matemislov90@gmail.com']
 export const createNewUser = async (user: Session['user']) => {
   const payload = await getPayload({ config: payloadConfig })
   // TODO: Better username generation
-  const username = slugify(user.name) || user.email.split('@')[0]
+  const username = user.email.split('@')[0]
   return payload.create({
     collection: 'users',
     data: {
