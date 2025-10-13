@@ -68,24 +68,29 @@ export interface Config {
   blocks: {};
   collections: {
     offers: Offer;
-    users: User;
     media: Media;
     private: Private;
+    orders: Order;
+    users: User;
     folders: FolderInterface;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
   collectionsJoins: {
+    users: {
+      orders: 'orders';
+    };
     folders: {
       documentsAndFolders: 'folders' | 'media' | 'private';
     };
   };
   collectionsSelect: {
     offers: OffersSelect<false> | OffersSelect<true>;
-    users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     private: PrivateSelect<false> | PrivateSelect<true>;
+    orders: OrdersSelect<false> | OrdersSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
     folders: FoldersSelect<false> | FoldersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -286,19 +291,28 @@ export interface Private {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders".
+ */
+export interface Order {
+  id: string;
+  orderId?: string | null;
+  authId?: (string | null) | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
   id: string;
-  name?: string | null;
   authId: string;
   /**
-   * WARNING: Changing this will change the url of your profle. Don't do it if not necessary.
+   * WARNING: Changing this will change the url of your profle.
    */
   username: string;
   email?: string | null;
-  avatar?: (string | null) | Media;
-  cover?: (string | null) | Media;
+  name?: string | null;
   Bio?: {
     root: {
       type: string;
@@ -314,6 +328,13 @@ export interface User {
     };
     [k: string]: unknown;
   } | null;
+  avatar?: (string | null) | Media;
+  cover?: (string | null) | Media;
+  orders?: {
+    docs?: (string | Order)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   role?: ('admin' | 'creator' | 'user') | null;
   updatedAt: string;
   createdAt: string;
@@ -330,16 +351,20 @@ export interface PayloadLockedDocument {
         value: string | Offer;
       } | null)
     | ({
-        relationTo: 'users';
-        value: string | User;
-      } | null)
-    | ({
         relationTo: 'media';
         value: string | Media;
       } | null)
     | ({
         relationTo: 'private';
         value: string | Private;
+      } | null)
+    | ({
+        relationTo: 'orders';
+        value: string | Order;
+      } | null)
+    | ({
+        relationTo: 'users';
+        value: string | User;
       } | null)
     | ({
         relationTo: 'folders';
@@ -397,22 +422,6 @@ export interface OffersSelect<T extends boolean = true> {
   description?: T;
   files?: T;
   tenantId?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
- */
-export interface UsersSelect<T extends boolean = true> {
-  name?: T;
-  authId?: T;
-  username?: T;
-  email?: T;
-  avatar?: T;
-  cover?: T;
-  Bio?: T;
-  role?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -532,6 +541,33 @@ export interface PrivateSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders_select".
+ */
+export interface OrdersSelect<T extends boolean = true> {
+  orderId?: T;
+  authId?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users_select".
+ */
+export interface UsersSelect<T extends boolean = true> {
+  authId?: T;
+  username?: T;
+  email?: T;
+  name?: T;
+  Bio?: T;
+  avatar?: T;
+  cover?: T;
+  orders?: T;
+  role?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

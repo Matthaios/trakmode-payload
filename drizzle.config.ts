@@ -3,12 +3,26 @@ import { defineConfig } from 'drizzle-kit'
 
 config({ path: '.env' })
 
-export default defineConfig({
-  schema: ['./src/db/auth-schema.ts'],
-  out: './migrations',
-  dialect: 'turso',
-  dbCredentials: {
-    url: process.env.DATABASE_URI!,
-    authToken: process.env.TURSO_AUTH_TOKEN!,
+const DB = {
+  auth: {
+    schema: ['./src/services/auth/schema.ts'],
+    out: './migrations/auth',
+    dbCredentials: {
+      url: process.env.AUTH_DB_URL!,
+      authToken: process.env.AUTH_DB_TOKEN!,
+    },
   },
+  payments: {
+    schema: ['./src/services/payments/schema.ts'],
+    out: './migrations/payments',
+    dbCredentials: {
+      url: process.env.PAYMENTS_DB_URL!,
+      authToken: process.env.PAYMENTS_DB_TOKEN!,
+    },
+  },
+}
+
+export default defineConfig({
+  dialect: 'turso',
+  ...DB[process.env.DRIZZLE_DB as keyof typeof DB],
 })

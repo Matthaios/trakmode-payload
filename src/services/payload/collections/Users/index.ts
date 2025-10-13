@@ -19,6 +19,8 @@ export const Users: CollectionConfig = {
   },
 
   admin: {
+    defaultColumns: ['name', 'email', 'username', 'role', 'createdAt'],
+    group: 'User Management',
     hideAPIURL: true,
     useAsTitle: 'name',
     hidden: ({ user }) => {
@@ -50,10 +52,6 @@ export const Users: CollectionConfig = {
 
   fields: [
     {
-      name: 'name',
-      type: 'text',
-    },
-    {
       name: 'authId',
       type: 'text',
       admin: {
@@ -69,8 +67,7 @@ export const Users: CollectionConfig = {
       admin: {
         position: 'sidebar',
 
-        description:
-          "WARNING: Changing this will change the url of your profle. Don't do it if not necessary.",
+        description: 'WARNING: Changing this will change the url of your profle.',
       },
       hooks: {
         beforeValidate: [formatSlugHook('name')],
@@ -87,9 +84,43 @@ export const Users: CollectionConfig = {
         readOnly: true,
       },
     },
-    { name: 'avatar', type: 'upload', relationTo: 'media' },
-    { name: 'cover', type: 'upload', relationTo: 'media' },
-    { name: 'Bio', type: 'richText' },
+    {
+      type: 'tabs',
+      tabs: [
+        {
+          label: 'Info',
+          fields: [
+            {
+              name: 'name',
+              type: 'text',
+            },
+
+            { name: 'Bio', type: 'richText' },
+            { name: 'avatar', type: 'upload', relationTo: 'media' },
+            { name: 'cover', type: 'upload', relationTo: 'media' },
+          ],
+        },
+        {
+          label: 'Orders',
+          access: {
+            create: () => false,
+            update: () => false,
+          },
+          fields: [
+            {
+              name: 'orders',
+              label: false,
+              type: 'join',
+              collection: 'orders',
+              on: 'authId',
+              admin: {
+                allowCreate: false,
+              },
+            },
+          ],
+        },
+      ],
+    },
     {
       name: 'role',
       type: 'select',

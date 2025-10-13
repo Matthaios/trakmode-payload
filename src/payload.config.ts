@@ -1,17 +1,15 @@
 // storage-adapter-import-placeholder
-import { Media } from '@/payload/collections/Media'
-import { Offers } from '@/payload/collections/Offers'
-import { PrivateAssets } from '@/payload/collections/PrivateAssets'
+import { env } from '@/env'
+import { collections } from '@/payload/collections'
 import { Users } from '@/payload/collections/Users'
 import { storage } from '@/payload/plugins/storage'
+import { TrakmodeTenantPlugin } from '@/payload/plugins/tenant'
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import { env } from '@/env'
 import path from 'path'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
-import { TrakmodeTenantPlugin } from '@/payload/plugins/tenant'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 export default buildConfig({
@@ -59,7 +57,7 @@ export default buildConfig({
     slug: 'folders',
   },
 
-  collections: [Offers, Users, Media, PrivateAssets],
+  collections,
   editor: lexicalEditor(),
   secret: env.PAYLOAD_SECRET,
   typescript: {

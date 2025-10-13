@@ -1,5 +1,5 @@
-import db from '@/db'
-import * as schema from '@/db/auth-schema'
+import db from './db'
+import * as schema from './schema'
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { nextCookies } from 'better-auth/next-js'
@@ -29,7 +29,7 @@ export const auth = betterAuth({
     user: {
       create: {
         after: async (user) => {
-          await createNewUser(user)
+          await createNewUser(user as unknown as Session['user'])
         },
       },
     },
@@ -37,19 +37,6 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: false,
   },
-
-  // secondaryStorage: {
-  //   get: async (key) => {
-  //     console.log('redisget', key)
-  //     return await redis.get(key)
-  //   },
-  //   set: async (key, value) => {
-  //     return await redis.set(key, value)
-  //   },
-  //   delete: async (key) => {
-  //     await redis.del(key)
-  //   },
-  // },
   plugins: [
     twoFactor({}),
     magicLink({
