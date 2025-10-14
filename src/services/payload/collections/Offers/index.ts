@@ -1,41 +1,22 @@
 import { CollectionConfig } from 'payload'
+import { isAdminOrTenantOwner } from '../../access/collections'
 
 export const Offers: CollectionConfig = {
   slug: 'offers',
   admin: {
     useAsTitle: 'title',
   },
-
+  access: {
+    create: () => false,
+    update: () => false,
+    delete: () => false,
+    read: isAdminOrTenantOwner,
+  },
   fields: [
     {
-      type: 'tabs',
-      tabs: [
-        {
-          label: 'Info',
-          fields: [
-            {
-              name: 'title',
-              type: 'text',
-            },
-            { name: 'cover', type: 'upload', relationTo: 'media' },
-            {
-              name: 'description',
-              type: 'richText',
-            },
-          ],
-        },
-        {
-          label: 'Assets',
-          fields: [
-            {
-              name: 'files',
-              type: 'upload',
-              relationTo: 'media',
-              hasMany: true,
-            },
-          ],
-        },
-      ],
+      name: 'title',
+      type: 'text',
+      required: true,
     },
   ],
 }

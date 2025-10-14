@@ -3,3 +3,5 @@ alwaysApply: true
 ---
 
 When using browser try using existing process at :3000 and not spinning up a new dev process.
+
+Use linear to plan and track the tasks.

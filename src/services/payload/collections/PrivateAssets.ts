@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { isAdminOrOwner } from '../access/collections'
+import { isAdminOrTenantOwner } from '../access/collections'
 export const PrivateAssets: CollectionConfig = {
   slug: 'private',
   labels: {
@@ -7,7 +7,7 @@ export const PrivateAssets: CollectionConfig = {
     plural: 'Files',
   },
   access: {
-    read: isAdminOrOwner,
+    read: isAdminOrTenantOwner,
   },
 
   folders: true,

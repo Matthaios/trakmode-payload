@@ -134,24 +134,7 @@ export interface UserAuthOperations {
  */
 export interface Offer {
   id: string;
-  title?: string | null;
-  cover?: (string | null) | Media;
-  description?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  files?: (string | Media)[] | null;
+  title: string;
   tenantId?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -295,8 +278,15 @@ export interface Private {
  */
 export interface Order {
   id: string;
-  orderId?: string | null;
-  authId?: (string | null) | User;
+  user: string | User;
+  orderId: string;
+  offerId?: (string | null) | Offer;
+  stripePaymentIntentId: string;
+  amount: number;
+  currency: string;
+  purchaseDate: string;
+  status: 'succeeded' | 'failed' | 'pending';
+  tenantId?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -307,6 +297,7 @@ export interface Order {
 export interface User {
   id: string;
   authId: string;
+  stripeCustomerId?: string | null;
   /**
    * WARNING: Changing this will change the url of your profle.
    */
@@ -336,6 +327,7 @@ export interface User {
     totalDocs?: number;
   };
   role?: ('admin' | 'creator' | 'user') | null;
+  tenantId?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -418,9 +410,6 @@ export interface PayloadMigration {
  */
 export interface OffersSelect<T extends boolean = true> {
   title?: T;
-  cover?: T;
-  description?: T;
-  files?: T;
   tenantId?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -547,8 +536,15 @@ export interface PrivateSelect<T extends boolean = true> {
  * via the `definition` "orders_select".
  */
 export interface OrdersSelect<T extends boolean = true> {
+  user?: T;
   orderId?: T;
-  authId?: T;
+  offerId?: T;
+  stripePaymentIntentId?: T;
+  amount?: T;
+  currency?: T;
+  purchaseDate?: T;
+  status?: T;
+  tenantId?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -558,6 +554,7 @@ export interface OrdersSelect<T extends boolean = true> {
  */
 export interface UsersSelect<T extends boolean = true> {
   authId?: T;
+  stripeCustomerId?: T;
   username?: T;
   email?: T;
   name?: T;
@@ -566,6 +563,7 @@ export interface UsersSelect<T extends boolean = true> {
   cover?: T;
   orders?: T;
   role?: T;
+  tenantId?: T;
   updatedAt?: T;
   createdAt?: T;
 }

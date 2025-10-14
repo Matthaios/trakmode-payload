@@ -10,7 +10,7 @@
     "idev": "bun generate:importmap && bun dev",
     "stripe:listen": "stripe listen --skip-verify",
     "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
-    "auth:generate": "npx @better-auth/cli generate --config ./src/services/auth/index.ts --output ./src/db/schema.ts --yes",
+    "auth:generate": "npx @better-auth/cli generate --config ./src/services/auth/index.ts --output ./src/services/auth/schema.ts --yes",
     "db:auth:generate": "cross-env DRIZZLE_DB=auth drizzle-kit generate",
     "db:auth:migrate": "cross-env DRIZZLE_DB=auth drizzle-kit migrate",
     "db:payments:generate": "cross-env DRIZZLE_DB=payments drizzle-kit generate",

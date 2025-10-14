@@ -6,6 +6,6 @@ import { Orders } from './Orders'
 import { group } from '../utils/group'
 
 export const collections = [
-  ...group('Content', [Offers, Media, PrivateAssets, Orders]),
-  ...group('Accounts', [Users]),
+  ...group('Content', [Offers, Media, PrivateAssets]),
+  ...group('Account', [Orders, Users]),
 ]

@@ -7,6 +7,7 @@ import { betterAuthStrategy } from './strategies/better-auth'
 import { isAdminField } from '@/payload/access/fields'
 import { formatSlugHook } from '@/payload/fields/slug/formatSlug'
 import { getServerSideURL } from '@/utils/getURL'
+import { tenantFieldSlug } from '@/payload/plugins/tenant'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -45,7 +46,6 @@ export const Users: CollectionConfig = {
   },
   auth: {
     disableLocalStrategy: true,
-
     strategies: [betterAuthStrategy],
   },
   endpoints: [meEndpoint],
@@ -60,6 +60,14 @@ export const Users: CollectionConfig = {
       },
 
       required: true,
+    },
+    {
+      name: 'stripeCustomerId',
+      type: 'text',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+      },
     },
     {
       name: 'username',
@@ -102,17 +110,13 @@ export const Users: CollectionConfig = {
         },
         {
           label: 'Orders',
-          access: {
-            create: () => false,
-            update: () => false,
-          },
+
           fields: [
             {
               name: 'orders',
-              label: false,
               type: 'join',
               collection: 'orders',
-              on: 'authId',
+              on: 'user',
               admin: {
                 allowCreate: false,
               },

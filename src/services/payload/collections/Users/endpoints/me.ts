@@ -16,6 +16,7 @@ export const meEndpoint: Endpoint = {
         { status: 401 },
       )
     }
+
     const user = await findOrCreateUser(session?.user)
     return Response.json({
       user: user,

@@ -19,6 +19,14 @@ export const auth = betterAuth({
   session: {
     expiresIn: 60 * 60 * 24 * 10, // 10 days
   },
+  user: {
+    additionalFields: {
+      stripeCustomerId: {
+        type: 'string',
+        required: false,
+      },
+    },
+  },
   socialProviders: {
     google: {
       clientId: env.GOOGLE_CLIENT_ID,

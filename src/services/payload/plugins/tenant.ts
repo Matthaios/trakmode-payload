@@ -1,15 +1,22 @@
-import { CollectionBeforeOperationHook, CollectionConfig, Config, Plugin } from 'payload'
-import { Media } from '../collections/Media'
+import { CollectionBeforeOperationHook, CollectionConfig, Config, Field } from 'payload'
+
+export const tenantFieldSlug = 'tenantId'
+
+export const tenantField: Field = {
+  name: tenantFieldSlug,
+  type: 'text',
+  admin: {
+    position: 'sidebar',
+  },
+}
 
 function addTenantField(collection: CollectionConfig) {
   return {
     ...collection,
     fields: [
-      ...collection.fields,
-      {
-        name: 'tenantId',
-        type: 'text',
-      },
+      // @ts-ignore
+      ...collection.fields.filter((field) => field?.name !== tenantFieldSlug),
+      tenantField,
     ],
   }
 }
@@ -25,7 +32,7 @@ export function TrakmodeTenantPlugin(config: Config): Config {
   return {
     ...config,
     collections: (config.collections || []).map((collection) => {
-      if (['media', 'private', 'offers'].includes(collection.slug)) {
+      if (['users', 'media', 'private', 'offers', 'orders'].includes(collection.slug)) {
         return addTenantField({
           ...collection,
           admin: {

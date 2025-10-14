@@ -18,7 +18,7 @@ export const isAdminOrSelf: Access = ({ req: { user } }) => {
   return false
 }
 
-export const isAdminOrOwner: Access = ({ req: { user } }) => {
+export const isAdminOrTenantOwner: Access = ({ req: { user } }) => {
   if (user) {
     if (user.role === 'admin') {
       return true
@@ -33,7 +33,7 @@ export const isAdminOrOwner: Access = ({ req: { user } }) => {
   return false
 }
 
-export const isOwner: Access = ({ req: { user } }) => {
+export const isTenantOwner: Access = ({ req: { user } }) => {
   if (user) {
     return {
       tenantId: {

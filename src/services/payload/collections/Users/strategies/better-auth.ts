@@ -24,7 +24,7 @@ export const betterAuthStrategy: AuthStrategy = {
     })
     let user = docs?.[0] || null
     if (!user) {
-      await createNewUser(session?.user)
+      await createNewUser(session?.user, payload)
       const { docs } = await payload.find({
         collection: 'users',
         where: {
