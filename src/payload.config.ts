@@ -13,12 +13,6 @@ import { fileURLToPath } from 'url'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 export default buildConfig({
-  bin: [
-    {
-      key: 'db:clear',
-      scriptPath: path.resolve(dirname, 'src/scripts/clear-db.ts'),
-    },
-  ],
   routes: {
     admin: '/dashboard',
     api: '/api',
