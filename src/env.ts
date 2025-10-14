@@ -18,7 +18,7 @@ export const env = createEnv({
     R2_SECRET_ACCESS_KEY: z.string(),
     DEVELOPMENT_MONGO_URI: z.string(),
     VERCEL_PROJECT_PRODUCTION_URL: z.string().optional(),
-    PAYLOAD_PUBLIC_SERVER_URL: z.string(),
+    PAYLOAD_PUBLIC_SERVER_URL: z.string().optional(),
     STRIPE_SECRET_KEY: z.string(),
     STRIPE_PUBLISHABLE_KEY: z.string(),
     STRIPE_WEBHOOK_SECRET: z.string(),
@@ -28,7 +28,7 @@ export const env = createEnv({
     PAYMENTS_DB_TOKEN: z.string(),
   },
   client: {
-    NEXT_PUBLIC_SERVER_URL: z.string(),
+    NEXT_PUBLIC_SERVER_URL: z.string().optional(),
   },
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
