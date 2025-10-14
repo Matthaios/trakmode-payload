@@ -1,21 +1,21 @@
-import { env } from '@/env'
-import { stripe } from '@/services/payments'
-import { tryCatch } from '@/utils/tryCatch'
-import { headers } from 'next/headers'
-import { waitUntil } from '@vercel/functions'
-import { NextResponse } from 'next/server'
+import { handleStripeWebhook } from '@/services/payments/webhooks'
 import Stripe from 'stripe'
+import { headers } from 'next/headers'
+import { stripe } from '@/services/payments'
+import { NextResponse } from 'next/server'
+import { env } from '@/env'
 
-export const handleStripeWebhook = async (req: Request) => {
+export async function POST(req: Request) {
   let event: Stripe.Event
 
   try {
-    const stripeSignature = (await headers()).get('stripe-signature')
-
+    const stripeSignature = req.headers.get('stripe-signature')
+    const body = await req.text()
+    console.log(body, stripeSignature as string, env.STRIPE_WEBHOOK_SECRET)
     event = stripe.webhooks.constructEvent(
-      await req.text(),
+      body,
       stripeSignature as string,
-      process.env.STRIPE_WEBHOOK_SECRET as string,
+      env.STRIPE_WEBHOOK_SECRET,
     )
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : 'Unknown error'

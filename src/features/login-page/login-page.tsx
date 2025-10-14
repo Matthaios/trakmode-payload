@@ -8,7 +8,7 @@ import { Input } from '@/components/untitled/base/input/input'
 import { authClient } from '@/services/auth/client'
 import { useState } from 'react'
 
-export const LoginPage = () => {
+export const LoginPage = ({ redirect }: { redirect?: string }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
 
@@ -22,8 +22,8 @@ export const LoginPage = () => {
 
       const { data, error } = await authClient.signIn.magicLink({
         email,
-        callbackURL: '/',
-        newUserCallbackURL: '/dashboard',
+        callbackURL: redirect || '/',
+        newUserCallbackURL: redirect || '/dashboard',
         errorCallbackURL: '/error',
       })
 
@@ -45,7 +45,7 @@ export const LoginPage = () => {
     try {
       const { data, error } = await authClient.signIn.social({
         provider: 'google',
-        callbackURL: '/dashboard',
+        callbackURL: redirect || '/dashboard',
       })
 
       if (error) {
