@@ -135,7 +135,46 @@ export interface UserAuthOperations {
 export interface Offer {
   id: string;
   title: string;
-  tenantId?: string | null;
+  user: string | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: string;
+  stripeCustomerId?: string | null;
+  /**
+   * WARNING: Changing this will change the url of your profle.
+   */
+  username: string;
+  email?: string | null;
+  name?: string | null;
+  bio?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  avatar?: (string | null) | Media;
+  cover?: (string | null) | Media;
+  orders?: {
+    docs?: (string | Order)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  role?: ('admin' | 'creator' | 'user') | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -147,7 +186,7 @@ export interface Media {
   id: string;
   alt?: string | null;
   prefix?: string | null;
-  tenantId?: string | null;
+  user: string | User;
   folder?: (string | null) | FolderInterface;
   updatedAt: string;
   createdAt: string;
@@ -258,7 +297,7 @@ export interface Private {
   id: string;
   alt?: string | null;
   prefix?: string | null;
-  tenantId?: string | null;
+  user: string | User;
   folder?: (string | null) | FolderInterface;
   updatedAt: string;
   createdAt: string;
@@ -278,7 +317,6 @@ export interface Private {
  */
 export interface Order {
   id: string;
-  user: string | User;
   orderId: string;
   offerId?: (string | null) | Offer;
   stripePaymentIntentId: string;
@@ -286,48 +324,7 @@ export interface Order {
   currency: string;
   purchaseDate: string;
   status: 'succeeded' | 'failed' | 'pending';
-  tenantId?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
- */
-export interface User {
-  id: string;
-  authId: string;
-  stripeCustomerId?: string | null;
-  /**
-   * WARNING: Changing this will change the url of your profle.
-   */
-  username: string;
-  email?: string | null;
-  name?: string | null;
-  Bio?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  avatar?: (string | null) | Media;
-  cover?: (string | null) | Media;
-  orders?: {
-    docs?: (string | Order)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  role?: ('admin' | 'creator' | 'user') | null;
-  tenantId?: string | null;
+  user: string | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -410,7 +407,7 @@ export interface PayloadMigration {
  */
 export interface OffersSelect<T extends boolean = true> {
   title?: T;
-  tenantId?: T;
+  user?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -421,7 +418,7 @@ export interface OffersSelect<T extends boolean = true> {
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   prefix?: T;
-  tenantId?: T;
+  user?: T;
   folder?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -517,7 +514,7 @@ export interface MediaSelect<T extends boolean = true> {
 export interface PrivateSelect<T extends boolean = true> {
   alt?: T;
   prefix?: T;
-  tenantId?: T;
+  user?: T;
   folder?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -536,7 +533,6 @@ export interface PrivateSelect<T extends boolean = true> {
  * via the `definition` "orders_select".
  */
 export interface OrdersSelect<T extends boolean = true> {
-  user?: T;
   orderId?: T;
   offerId?: T;
   stripePaymentIntentId?: T;
@@ -544,7 +540,7 @@ export interface OrdersSelect<T extends boolean = true> {
   currency?: T;
   purchaseDate?: T;
   status?: T;
-  tenantId?: T;
+  user?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -553,17 +549,16 @@ export interface OrdersSelect<T extends boolean = true> {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
-  authId?: T;
+  id?: T;
   stripeCustomerId?: T;
   username?: T;
   email?: T;
   name?: T;
-  Bio?: T;
+  bio?: T;
   avatar?: T;
   cover?: T;
   orders?: T;
   role?: T;
-  tenantId?: T;
   updatedAt?: T;
   createdAt?: T;
 }

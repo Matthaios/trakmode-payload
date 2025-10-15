@@ -7,7 +7,8 @@ import { betterAuthStrategy } from './strategies/better-auth'
 import { isAdminField } from '@/payload/access/fields'
 import { formatSlugHook } from '@/payload/fields/slug/formatSlug'
 import { getServerSideURL } from '@/utils/getURL'
-import { tenantFieldSlug } from '@/payload/plugins/tenant'
+import { ObjectId } from 'mongodb'
+import { privateField } from '../../utils/fields'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -17,6 +18,16 @@ export const Users: CollectionConfig = {
     read: isAdminOrSelf,
     update: isAdminOrSelf,
     delete: isAdmin,
+  },
+  hooks: {
+    beforeValidate: [
+      ({ data, req }) => {
+        console.log('beforeValidate', data)
+        // @ts-ignore
+        data._id = new ObjectId(data?.id)
+        return data
+      },
+    ],
   },
 
   admin: {
@@ -51,24 +62,17 @@ export const Users: CollectionConfig = {
   endpoints: [meEndpoint],
 
   fields: [
-    {
-      name: 'authId',
+    privateField({
+      name: 'id',
       type: 'text',
-      admin: {
-        hidden: true,
-        position: 'sidebar',
-      },
-
       required: true,
-    },
-    {
+      unique: true,
+      index: true,
+    }),
+    privateField({
       name: 'stripeCustomerId',
       type: 'text',
-      admin: {
-        position: 'sidebar',
-        readOnly: true,
-      },
-    },
+    }),
     {
       name: 'username',
       type: 'text',
@@ -103,7 +107,7 @@ export const Users: CollectionConfig = {
               type: 'text',
             },
 
-            { name: 'Bio', type: 'richText' },
+            { name: 'bio', type: 'richText' },
             { name: 'avatar', type: 'upload', relationTo: 'media' },
             { name: 'cover', type: 'upload', relationTo: 'media' },
           ],

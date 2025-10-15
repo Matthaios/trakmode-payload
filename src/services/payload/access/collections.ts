@@ -1,4 +1,5 @@
 import { Access } from 'payload'
+import { tenantFieldSlug } from '../plugins/tenant'
 
 export const isAdmin: Access = ({ req: { user } }) => {
   return Boolean(user?.role === 'admin')
@@ -24,8 +25,8 @@ export const isAdminOrTenantOwner: Access = ({ req: { user } }) => {
       return true
     }
     return {
-      tenantId: {
-        equals: user.authId,
+      [tenantFieldSlug]: {
+        equals: user.id,
       },
     }
   }
@@ -36,8 +37,8 @@ export const isAdminOrTenantOwner: Access = ({ req: { user } }) => {
 export const isTenantOwner: Access = ({ req: { user } }) => {
   if (user) {
     return {
-      tenantId: {
-        equals: user.authId,
+      [tenantFieldSlug]: {
+        equals: user.id,
       },
     }
   }

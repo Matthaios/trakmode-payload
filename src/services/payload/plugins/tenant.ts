@@ -1,14 +1,20 @@
 import { CollectionBeforeOperationHook, CollectionConfig, Config, Field } from 'payload'
+import { privateField } from '../utils/fields'
 
-export const tenantFieldSlug = 'tenantId'
+export const tenantFieldSlug = 'user'
 
-export const tenantField: Field = {
-  name: tenantFieldSlug,
-  type: 'text',
+export const tenantField: Field = privateField({
+  name: 'user',
+  type: 'relationship',
+  relationTo: 'users',
+  hasMany: false,
+  required: true,
+
   admin: {
+    readOnly: true,
     position: 'sidebar',
   },
-}
+})
 
 function addTenantField(collection: CollectionConfig) {
   return {
@@ -21,18 +27,20 @@ function addTenantField(collection: CollectionConfig) {
   }
 }
 
-const setTenantOperation: CollectionBeforeOperationHook = ({ args, operation, context, req }) => {
+const setTenantOperation: CollectionBeforeOperationHook = ({ args, operation, req }) => {
   if (operation === 'create' || operation === 'update') {
-    args.data.tenantId = args.data.tenantId || req.user?.id
+    console.log('setTenantOperation', args.data, req.user)
+    args.data[tenantFieldSlug] = args.data[tenantFieldSlug] || req.user?.id
   }
   return args
 }
 
 export function TrakmodeTenantPlugin(config: Config): Config {
+  const collections = [...(config.collections || [])]
   return {
     ...config,
-    collections: (config.collections || []).map((collection) => {
-      if (['users', 'media', 'private', 'offers', 'orders'].includes(collection.slug)) {
+    collections: collections.map((collection) => {
+      if (['media', 'private', 'offers', 'orders'].includes(collection.slug)) {
         return addTenantField({
           ...collection,
           admin: {
@@ -42,7 +50,7 @@ export function TrakmodeTenantPlugin(config: Config): Config {
                 return true
               }
               return {
-                tenantId: {
+                [tenantFieldSlug]: {
                   equals: req.user?.id,
                 },
               }

@@ -73,7 +73,7 @@ const eslintConfig = [
             },
             {
               from: ['service'],
-              allow: ['shared', ['service', { serviceName: '${from.serviceName}' }]],
+              allow: ['shared', 'service'],
             },
             {
               from: ['app', 'neverImport'],

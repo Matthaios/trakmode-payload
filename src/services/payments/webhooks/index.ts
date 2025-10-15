@@ -1,15 +1,13 @@
-import { env } from '@/env'
-import { stripe } from '@/services/payments'
-import { tryCatch } from '@/utils/tryCatch'
-import { headers } from 'next/headers'
-import { waitUntil } from '@vercel/functions'
-import { NextResponse } from 'next/server'
-import Stripe from 'stripe'
-import { getPayload } from 'payload'
 import payloadConfig from '@/payload.config'
 import db from '@/services/auth/db'
 import { user } from '@/services/auth/schema'
+import { tenantFieldSlug } from '@/services/payload/plugins/tenant'
+import { stripe } from '@/services/payments'
 import { eq } from 'drizzle-orm'
+import { headers } from 'next/headers'
+import { NextResponse } from 'next/server'
+import { getPayload } from 'payload'
+import Stripe from 'stripe'
 
 export const handleStripeWebhook = async (req: Request) => {
   let event: Stripe.Event
@@ -111,7 +109,7 @@ async function createOrderFromCheckoutSession(session: Stripe.Checkout.Session) 
       collection: 'orders',
       data: {
         orderId: session.id,
-        authId: userId,
+        [tenantFieldSlug]: userId,
         stripePaymentIntentId: paymentIntentId,
         amount: amount / 100, // Convert from cents
         currency,
@@ -159,7 +157,7 @@ async function createOrderFromPaymentIntent(paymentIntent: Stripe.PaymentIntent)
       collection: 'orders',
       data: {
         orderId: paymentIntent.id,
-        authId: userId,
+        [tenantFieldSlug]: userId,
         offerId: offerId || null,
         stripePaymentIntentId: paymentIntent.id,
         amount: amount / 100, // Convert from cents

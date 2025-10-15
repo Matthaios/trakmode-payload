@@ -11,12 +11,9 @@ export const createNewUser = async (user: Session['user'], reqPayload?: BasePayl
   // TODO: Better username generation needed
   const username = user.email.split('@')[0]
 
-  let stripeCustomerId = ''
-
-  try {
-    stripeCustomerId = await getOrCreateCustomer(user.id, user.email)
-  } catch (error) {
-    console.error(`❌ Failed to create Stripe customer for user ${user.id}:`, error)
+  // If stripeCustomerId is not provided, create it
+  if (!user.stripeCustomerId) {
+    user.stripeCustomerId = await getOrCreateCustomer(user.id, user.email)
   }
 
   // Create Payload user first
@@ -24,9 +21,8 @@ export const createNewUser = async (user: Session['user'], reqPayload?: BasePayl
     collection: 'users',
     data: {
       id: user.id,
-      authId: user.id,
       name: user.name,
-      stripeCustomerId,
+      stripeCustomerId: user.stripeCustomerId,
       email: user.email,
       role: adminEmails.includes(user.email) ? 'admin' : 'user',
       username,
