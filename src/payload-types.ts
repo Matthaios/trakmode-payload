@@ -79,6 +79,7 @@ export interface Config {
   };
   collectionsJoins: {
     users: {
+      offers: 'offers';
       orders: 'orders';
     };
     folders: {
@@ -135,6 +136,7 @@ export interface UserAuthOperations {
 export interface Offer {
   id: string;
   title: string;
+  price: number;
   user: string | User;
   updatedAt: string;
   createdAt: string;
@@ -152,6 +154,7 @@ export interface User {
   username: string;
   email?: string | null;
   name?: string | null;
+  tagline?: string | null;
   bio?: {
     root: {
       type: string;
@@ -169,6 +172,11 @@ export interface User {
   } | null;
   avatar?: (string | null) | Media;
   cover?: (string | null) | Media;
+  offers?: {
+    docs?: (string | Offer)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   orders?: {
     docs?: (string | Order)[];
     hasNextPage?: boolean;
@@ -407,6 +415,7 @@ export interface PayloadMigration {
  */
 export interface OffersSelect<T extends boolean = true> {
   title?: T;
+  price?: T;
   user?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -554,9 +563,11 @@ export interface UsersSelect<T extends boolean = true> {
   username?: T;
   email?: T;
   name?: T;
+  tagline?: T;
   bio?: T;
   avatar?: T;
   cover?: T;
+  offers?: T;
   orders?: T;
   role?: T;
   updatedAt?: T;

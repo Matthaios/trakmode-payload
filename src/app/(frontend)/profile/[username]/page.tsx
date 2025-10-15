@@ -1,36 +1,36 @@
+import RichText from '@/components/elements/RichText'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
-import { getPayload } from 'payload'
-import { draftMode } from 'next/headers'
-import payloadConfig from '@/payload.config'
-import { ArrowLeft, SearchLg } from '@untitledui/icons'
 import { AvatarProfilePhoto } from '@/components/untitled/base/avatar/avatar-profile-photo'
 import { Button } from '@/components/untitled/base/buttons/button'
-import { Input } from '@/components/untitled/base/input/input'
-import RichText from '@/components/elements/RichText'
+import { payloadClient } from '@/services/payload/client'
+import { ArrowLeft } from '@untitledui/icons'
+import { draftMode } from 'next/headers'
+import { unstable_cache } from 'next/cache'
 
-export default async function ProfilePage({ params }: { params: Promise<{ username: string }> }) {
-  const { username } = await params
-  const { isEnabled: draft } = await draftMode()
-  const payload = await getPayload({ config: payloadConfig })
+async function loadProfile(username: string) {
+  const payload = await payloadClient()
   const { docs } = await payload.find({
     collection: 'users',
-    draft,
+    depth: 1,
     limit: 1,
 
-    select: {
-      avatar: true,
-      cover: true,
-      bio: true,
-      name: true,
-      username: true,
-    },
     pagination: false,
     overrideAccess: true,
     where: {
       username: { equals: username },
     },
   })
-  const user = docs?.[0] || null
+
+  return docs?.[0] || null
+}
+
+export default async function ProfilePage({ params }: { params: Promise<{ username: string }> }) {
+  const { username } = await params
+  const { isEnabled: draft } = await draftMode()
+
+  const user = await unstable_cache(loadProfile, [`user:profile:${username}`], {
+    tags: [`user:profile:${username}`],
+  })(username)
 
   if (!user) {
     return (
@@ -54,17 +54,11 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
           style={{
             backgroundSize: 'cover',
             backgroundPosition: 'center',
+            backgroundImage: `url(${user.cover?.url as string})`,
           }}
         />
 
         <div className="relative -mt-12 w-full max-w-6xl px-3 md:-mt-16 md:px-8">
-          {/* Back Button for Mobile */}
-          <div className="absolute top-17 left-0 flex md:hidden">
-            <Button href="/" color="link-gray" size="md" iconLeading={<ArrowLeft />}>
-              Back
-            </Button>
-          </div>
-
           {/* Profile Section */}
           <div className="relative flex flex-col items-center gap-4 border-b border-secondary pb-4 md:gap-5 md:pb-5">
             {/* Avatar - Mobile */}
@@ -98,7 +92,9 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
                   {user.name || username}
                 </h1>
                 <p className="text-md text-balance text-tertiary">@{username}</p>
-                {user.bio && <RichText data={user.bio} />}
+                {user.tagline && (
+                  <p className="text-md text-balance text-tertiary">{user.tagline}</p>
+                )}
               </div>
             </div>
           </div>

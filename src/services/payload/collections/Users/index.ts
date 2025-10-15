@@ -9,6 +9,8 @@ import { formatSlugHook } from '@/payload/fields/slug/formatSlug'
 import { getServerSideURL } from '@/utils/getURL'
 import { ObjectId } from 'mongodb'
 import { privateField } from '../../utils/fields'
+import { revalidateTag } from 'next/cache'
+import { tenantFieldSlug } from '../../plugins/tenant'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -24,8 +26,16 @@ export const Users: CollectionConfig = {
       ({ data, req }) => {
         console.log('beforeValidate', data)
         // @ts-ignore
-        data._id = new ObjectId(data?.id)
+        if (!data?.id) {
+          throw new Error('ID is required')
+        }
+
         return data
+      },
+    ],
+    afterChange: [
+      ({ data }) => {
+        revalidateTag(`user:profile:${data?.username}`)
       },
     ],
   },
@@ -103,8 +113,19 @@ export const Users: CollectionConfig = {
           label: 'Info',
           fields: [
             {
-              name: 'name',
-              type: 'text',
+              type: 'row',
+              fields: [
+                {
+                  name: 'name',
+                  label: 'Full Name',
+                  type: 'text',
+                },
+                {
+                  name: 'tagline',
+                  label: 'Tagline',
+                  type: 'text',
+                },
+              ],
             },
 
             { name: 'bio', type: 'richText' },
@@ -117,10 +138,22 @@ export const Users: CollectionConfig = {
 
           fields: [
             {
+              name: 'offers',
+              type: 'join',
+              collection: 'offers',
+              admin: {
+                defaultColumns: ['title', 'createdAt'],
+                disableListColumn: true,
+                disableListFilter: true,
+              },
+              orderable: false,
+              on: tenantFieldSlug,
+            },
+            {
               name: 'orders',
               type: 'join',
               collection: 'orders',
-              on: 'user',
+              on: tenantFieldSlug,
               admin: {
                 allowCreate: false,
               },

@@ -7,11 +7,11 @@ export const Media: CollectionConfig = {
     read: () => true,
   },
   trash: true,
-
   hooks: {
     beforeOperation: [bo_update_user_prefix],
   },
   admin: {
+    hidden: true,
     hideAPIURL: true,
   },
 

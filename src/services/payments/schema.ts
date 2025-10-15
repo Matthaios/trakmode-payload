@@ -23,7 +23,9 @@ export const stripeWebhooks = sqliteTable('stripe_webhooks', {
 export const stripeCheckoutSessions = sqliteTable('stripe_checkout_sessions', {
   id: int().primaryKey({ autoIncrement: true }),
   checkoutSessionId: text('checkout_session_id').notNull().unique(),
+  stripePaymentIntentId: text('stripe_payment_intent_id').notNull().unique(),
   userId: text('user_id').notNull(),
+  offerId: text('offer_id').notNull(),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 })
