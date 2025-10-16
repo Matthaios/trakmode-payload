@@ -1,6 +1,8 @@
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { FlatCompat } from '@eslint/eslintrc'
+import boundaries from 'eslint-plugin-boundaries'
+import preferredImport from 'eslint-plugin-preferred-import'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -11,8 +13,17 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  ...compat.config({
+    parserOptions: {
+      project: './tsconfig.json',
+      tsconfigRootDir: __dirname,
+    },
+  }),
   {
-    plugins: ['boundaries'],
+    plugins: {
+      boundaries,
+      'preferred-import': preferredImport,
+    },
     settings: {
       'boundaries/include': ['src/**/*'],
       'boundaries/elements': [
@@ -104,7 +115,7 @@ const eslintConfig = [
     },
   },
   {
-    ignores: ['.next/'],
+    ignores: ['.next/', '.repo/'],
   },
 ]
 

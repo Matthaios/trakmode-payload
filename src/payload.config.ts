@@ -27,6 +27,7 @@ export default buildConfig({
     user: Users.slug,
 
     importMap: {
+      importMapFile: path.resolve(dirname, 'app/(payload)/importMap.js'),
       baseDir: path.resolve(dirname),
     },
 

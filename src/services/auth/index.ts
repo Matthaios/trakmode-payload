@@ -9,6 +9,7 @@ import { magicLink, openAPI, twoFactor } from 'better-auth/plugins'
 import { createNewUser } from '@/payload/collections/Users/actions/create-new-user'
 import { env } from '@/env'
 import { createOrFindCustomer } from '../payments/utils/create-stripe-user'
+import { headers } from 'next/headers'
 
 // your drizzle instance
 export const auth = betterAuth({
@@ -77,5 +78,10 @@ export const auth = betterAuth({
     nextCookies(),
   ],
 })
+
+export const getSession = async () =>
+  auth.api.getSession({
+    headers: await headers(),
+  })
 
 export type Session = typeof auth.$Infer.Session

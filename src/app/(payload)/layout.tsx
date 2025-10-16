@@ -1,32 +1,11 @@
-/* THIS FILE WAS GENERATED AUTOMATICALLY BY PAYLOAD. */
-/* DO NOT MODIFY IT BECAUSE IT COULD BE REWRITTEN AT ANY TIME. */
-import config from '@payload-config'
-import '@payloadcms/next/css'
-import type { ServerFunctionClient } from 'payload'
-import { handleServerFunctions, RootLayout } from '@payloadcms/next/layouts'
-import React from 'react'
+import { getSession } from '@/services/auth'
+import { redirect } from 'next/navigation'
 
-import { importMap } from './dashboard/importMap.js'
-import './custom.scss'
-import './tailwind.css'
+export default async function AuthLayout({ children }: { children: React.ReactNode }) {
+  const session = await getSession()
 
-type Args = {
-  children: React.ReactNode
+  if (!session) {
+    return redirect('/login')
+  }
+  return <>{children}</>
 }
-
-const serverFunction: ServerFunctionClient = async function (args) {
-  'use server'
-  return handleServerFunctions({
-    ...args,
-    config,
-    importMap,
-  })
-}
-
-const Layout = ({ children }: Args) => (
-  <RootLayout config={config} importMap={importMap} serverFunction={serverFunction}>
-    {children}
-  </RootLayout>
-)
-
-export default Layout

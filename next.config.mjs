@@ -3,6 +3,16 @@ import { withPayload } from '@payloadcms/next/withPayload'
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   devIndicators: false,
+  redirects: async () => {
+    return [
+      {
+        source: '/dashboard/login',
+        destination: '/login',
+        permanent: false,
+      },
+    ]
+  },
+
   typescript: {
     ignoreBuildErrors: true,
   },
