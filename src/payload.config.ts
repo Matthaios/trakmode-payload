@@ -10,6 +10,7 @@ import path from 'path'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
+import { EmailPlugin } from './services/payload/plugins/email'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 export default buildConfig({
@@ -63,5 +64,5 @@ export default buildConfig({
   }),
   sharp,
   telemetry: false,
-  plugins: [storage, TrakmodeTenantPlugin],
+  plugins: [storage, TrakmodeTenantPlugin, EmailPlugin],
 })

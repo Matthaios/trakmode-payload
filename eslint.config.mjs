@@ -38,6 +38,7 @@ const eslintConfig = [
             'src/lib/**/*',
             'src/server/**/*',
             'src/assets/**/*',
+            'src/env.ts',
           ],
         },
         {

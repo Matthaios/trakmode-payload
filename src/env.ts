@@ -26,6 +26,11 @@ export const env = createEnv({
     AUTH_DB_TOKEN: z.string(),
     PAYMENTS_DB_URL: z.string(),
     PAYMENTS_DB_TOKEN: z.string(),
+    SENDER_EMAIL: z.string(),
+    SMTP_HOST: z.string(),
+    SMTP_USER: z.string(),
+    SMTP_PASS: z.string(),
+    SMTP_PORT: z.number(),
   },
   client: {
     NEXT_PUBLIC_SERVER_URL: z.string().optional(),
@@ -55,5 +60,10 @@ export const env = createEnv({
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+    SENDER_EMAIL: process.env.SENDER_EMAIL,
+    SMTP_HOST: process.env.SMTP_HOST,
+    SMTP_USER: process.env.SMTP_USER,
+    SMTP_PASS: process.env.SMTP_PASS,
+    SMTP_PORT: process.env.SMTP_PORT,
   },
 })
