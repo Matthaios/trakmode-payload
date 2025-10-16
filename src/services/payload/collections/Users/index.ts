@@ -24,7 +24,6 @@ export const Users: CollectionConfig = {
   hooks: {
     beforeValidate: [
       ({ data, req }) => {
-        console.log('beforeValidate', data)
         // @ts-ignore
         if (!data?.id) {
           throw new Error('ID is required')

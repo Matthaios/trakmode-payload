@@ -30,7 +30,7 @@ export const env = createEnv({
     SMTP_HOST: z.string(),
     SMTP_USER: z.string(),
     SMTP_PASS: z.string(),
-    SMTP_PORT: z.number(),
+    SMTP_PORT: z.coerce.number(),
   },
   client: {
     NEXT_PUBLIC_SERVER_URL: z.string().optional(),

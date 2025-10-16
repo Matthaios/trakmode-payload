@@ -25,7 +25,7 @@ export const LoginPage = ({ redirect }: { redirect?: string }) => {
 
       const { error } = await authClient.signIn.magicLink({
         email,
-        callbackURL: redirect || '/',
+        callbackURL: redirect || '/dashboard',
         newUserCallbackURL: redirect || '/dashboard',
         errorCallbackURL: '/error',
       })

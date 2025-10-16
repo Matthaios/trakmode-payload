@@ -10,6 +10,7 @@ import { createNewUser } from '@/payload/collections/Users/actions/create-new-us
 import { env } from '@/env'
 import { createOrFindCustomer } from '../payments/utils/create-stripe-user'
 import { headers } from 'next/headers'
+import { payloadClient } from '../payload/client'
 
 // your drizzle instance
 export const auth = betterAuth({
@@ -71,6 +72,13 @@ export const auth = betterAuth({
     twoFactor({}),
     magicLink({
       sendMagicLink: async ({ email, token, url }, request) => {
+        const payload = await payloadClient()
+        await payload.sendEmail({
+          to: email,
+          subject: 'Trakmode Magic Link',
+          text: `Click the link to login: ${url}`,
+          html: `<p>Click the link to login: <a href="${url}">${url}</a></p>`,
+        })
         console.log('sendMagicLink', email, token, url)
       },
     }),
