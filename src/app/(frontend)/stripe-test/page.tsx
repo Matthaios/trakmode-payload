@@ -3,6 +3,7 @@ import { auth } from '@/services/auth'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { stripe } from '@/services/payments'
+import { getClientSideURL } from '@/utils/getURL'
 
 export default async function StripeTestPage() {
   const session = await auth.api.getSession({ headers: await headers() })
@@ -12,8 +13,8 @@ export default async function StripeTestPage() {
   }
   const chechout = await stripe.checkout.sessions.create({
     customer_email: session?.user?.email,
-    success_url: 'http://localhost:3000/stripe-test',
-    cancel_url: 'http://localhost:3000/stripe-test',
+    success_url: `${getClientSideURL()}/stripe-test`,
+    cancel_url: `${getClientSideURL()}/stripe-test`,
     metadata: {
       userId: session?.user?.id,
     },
