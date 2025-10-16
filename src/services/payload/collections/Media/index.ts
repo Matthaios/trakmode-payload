@@ -11,7 +11,6 @@ export const Media: CollectionConfig = {
     beforeOperation: [bo_update_user_prefix],
   },
   admin: {
-    hidden: true,
     hideAPIURL: true,
   },
 

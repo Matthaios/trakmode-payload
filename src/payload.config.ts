@@ -20,6 +20,7 @@ export default buildConfig({
   },
 
   admin: {
+    theme: 'dark',
     meta: {
       title: 'Trakmode',
       applicationName: 'Trakmode',
