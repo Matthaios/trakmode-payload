@@ -20,7 +20,7 @@ export const env = createEnv({
     VERCEL_PROJECT_PRODUCTION_URL: z.string().optional(),
     PAYLOAD_PUBLIC_SERVER_URL: z.string().optional(),
     STRIPE_SECRET_KEY: z.string(),
-    STRIPE_PUBLISHABLE_KEY: z.string(),
+    STRIPE_PUBLISHABLE_KEY: z.string().optional(),
     STRIPE_WEBHOOK_SECRET: z.string(),
     AUTH_DB_URL: z.string(),
     AUTH_DB_TOKEN: z.string(),
@@ -34,6 +34,7 @@ export const env = createEnv({
   },
   client: {
     NEXT_PUBLIC_SERVER_URL: z.string().optional(),
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string(),
   },
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
@@ -59,6 +60,7 @@ export const env = createEnv({
     PAYLOAD_PUBLIC_SERVER_URL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     SENDER_EMAIL: process.env.SENDER_EMAIL,
     SMTP_HOST: process.env.SMTP_HOST,

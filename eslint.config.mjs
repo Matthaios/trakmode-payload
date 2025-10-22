@@ -12,7 +12,7 @@ const compat = new FlatCompat({
 })
 
 const eslintConfig = [
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  ...compat.extends('next/core-web-vitals', 'next/typescript', '@feature-sliced'),
   ...compat.config({
     parserOptions: {
       project: './tsconfig.json',
@@ -68,36 +68,7 @@ const eslintConfig = [
     },
     rules: {
       'preferred-import/ts-imports': 'error',
-      'boundaries/no-unknown': ['error'],
-      'boundaries/no-unknown-files': ['error'],
-      'boundaries/element-types': [
-        'error',
-        {
-          default: 'disallow',
-          rules: [
-            {
-              from: ['shared'],
-              allow: ['shared'],
-            },
-            {
-              from: ['feature'],
-              allow: ['shared', 'service', ['feature', { featureName: '${from.featureName}' }]],
-            },
-            {
-              from: ['service'],
-              allow: ['shared', 'service'],
-            },
-            {
-              from: ['app', 'neverImport'],
-              allow: ['shared', 'feature', 'service'],
-            },
-            {
-              from: ['app'],
-              allow: [['app', { fileName: '*.css' }]],
-            },
-          ],
-        },
-      ],
+
       '@typescript-eslint/ban-ts-comment': 'warn',
       '@typescript-eslint/no-empty-object-type': 'warn',
       '@typescript-eslint/no-explicit-any': 'warn',
