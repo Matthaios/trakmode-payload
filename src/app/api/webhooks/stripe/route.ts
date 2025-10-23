@@ -1,7 +1,7 @@
 import { handleStripeWebhook } from '@/services/payments/webhooks'
 import Stripe from 'stripe'
 import { headers } from 'next/headers'
-import { stripe } from '@/services/payments'
+import { stripe } from '@/services/payments/stripe'
 import { NextResponse } from 'next/server'
 import { env } from '@/env'
 

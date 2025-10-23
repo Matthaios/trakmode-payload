@@ -79,7 +79,6 @@ export interface Config {
   };
   collectionsJoins: {
     users: {
-      offers: 'offers';
       orders: 'orders';
     };
     folders: {
@@ -172,10 +171,13 @@ export interface User {
   } | null;
   avatar?: (string | null) | Media;
   cover?: (string | null) | Media;
-  offers?: {
-    docs?: (string | Offer)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
+  links?: {
+    website?: string | null;
+    twitter?: string | null;
+    instagram?: string | null;
+    linkedin?: string | null;
+    youtube?: string | null;
+    tiktok?: string | null;
   };
   orders?: {
     docs?: (string | Order)[];
@@ -567,7 +569,16 @@ export interface UsersSelect<T extends boolean = true> {
   bio?: T;
   avatar?: T;
   cover?: T;
-  offers?: T;
+  links?:
+    | T
+    | {
+        website?: T;
+        twitter?: T;
+        instagram?: T;
+        linkedin?: T;
+        youtube?: T;
+        tiktok?: T;
+      };
   orders?: T;
   role?: T;
   updatedAt?: T;

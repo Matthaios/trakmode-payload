@@ -7,7 +7,6 @@ import { betterAuthStrategy } from './strategies/better-auth'
 import { isAdminField } from '@/payload/access/fields'
 import { formatSlugHook } from '@/payload/fields/slug/formatSlug'
 import { getServerSideURL } from '@/utils/getURL'
-import { ObjectId } from 'mongodb'
 import { privateField } from '../../utils/fields'
 import { revalidateTag } from 'next/cache'
 import { tenantFieldSlug } from '../../plugins/tenant'
@@ -137,7 +136,12 @@ export const Users: CollectionConfig = {
           name: 'links',
           fields: [
             { name: 'website', type: 'text', admin: { placeholder: 'https://www.example.com' } },
-            { name: 'X (Twitter)', type: 'text', admin: { placeholder: 'https://x.com/example' } },
+            {
+              name: 'twitter',
+              label: 'X (Twitter)',
+              type: 'text',
+              admin: { placeholder: 'https://x.com/example' },
+            },
             {
               name: 'instagram',
               type: 'text',

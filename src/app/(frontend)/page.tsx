@@ -15,7 +15,6 @@ import { Logo } from '@/components/elements/Logo'
 import { Button } from '@/components/untitled/base/buttons/button'
 import { Input } from '@/components/untitled/base/input/input'
 import { X, Facebook, LinkedIn, Instagram } from '@/components/untitled/foundations/social-icons'
-
 export default function HomePage() {
   const [faqOpen, setFaqOpen] = useState<string | null>(null)
   const [email, setEmail] = useState('')
@@ -115,7 +114,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-white mb-3 text-2xl font-semibold">Application Received</h3>
                 <p className="text-gray-300 mb-6 text-lg leading-relaxed">
-                  We've sent you an email. Please confirm to complete your application.
+                  We&apos;ve sent you an email. Please confirm to complete your application.
                 </p>
                 <div className="pt-6 border-t border-white/10">
                   <p className="text-gray-400 mb-4 text-sm">Share with your network</p>
@@ -183,7 +182,7 @@ export default function HomePage() {
             lineHeight: 1.1,
           }}
         >
-          The world's top audio creators share, connect, and collaborate on Trakmode
+          The world&apos;s top audio creators share, connect, and collaborate on Trakmode
         </h2>
         <p
           className="text-gray-400 max-w-3xl mx-auto"
@@ -383,10 +382,11 @@ export default function HomePage() {
                         letterSpacing: '-0.01em',
                       }}
                     >
-                      Trakmode is a professional platform designed specifically for audio creators
+                      {`Trakmode is a professional platform designed specifically for audio creators
                       to showcase their work, connect with fans and collaborators, and monetize
                       their content. It's built by producers for producers, offering a centralized
                       hub for your entire sonic world.
+                    `}
                     </div>
                   )}
                 </div>
@@ -502,8 +502,8 @@ export default function HomePage() {
                     >
                       Trakmode provides creators with a professional platform to showcase their
                       work, connect directly with fans and brands, monetize their content, and build
-                      their network without algorithmic interference. It's your creator-owned space
-                      in the audio world.
+                      their network without algorithmic interference. It&apos;s your creator-owned
+                      space in the audio world.
                     </div>
                   )}
                 </div>

@@ -1,3 +1,3 @@
 import { User } from '@/payload-types'
 
-type Links = NonNullable<User['links']>
+export type Links = User['links']

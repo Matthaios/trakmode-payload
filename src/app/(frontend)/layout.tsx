@@ -1,6 +1,6 @@
 import React from 'react'
 import './styles/globals.css'
-import '../../app/styles/fonts/index.scss'
+import '@/app/styles/fonts/index.scss'
 
 export const metadata = {
   description:

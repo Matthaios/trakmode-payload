@@ -1,13 +1,13 @@
-import { stripe } from './index'
+import { stripe } from './stripe'
 import paymentsDb from './db'
 import { stripeCustomers } from './schema'
 import { eq } from 'drizzle-orm'
-import db from '../auth/db'
-import { user } from '../auth/schema'
-import { auth } from '../auth'
+import db from '@/services/auth/db'
+import { user } from '@/services/auth/schema'
+import { auth } from '@/services/auth'
 import { headers } from 'next/headers'
 import Stripe from 'stripe'
-import { payloadClient } from '../payload/client'
+import { payloadClient } from '@/services/payload/client'
 
 export async function getOrCreateCustomer(
   userId: string,

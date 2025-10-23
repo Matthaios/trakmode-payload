@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { stripe } from '@/services/payments'
+import { stripe } from '@/services/payments/stripe'
 
 type CreateIntentBody = {
   amount: number

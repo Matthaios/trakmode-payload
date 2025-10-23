@@ -1,4 +1,4 @@
-import { stripe } from '@/services/payments/index'
+import { stripe } from '@/services/payments/stripe'
 import Stripe from 'stripe'
 
 export const createOrFindCustomer = async (

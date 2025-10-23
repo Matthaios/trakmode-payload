@@ -12,13 +12,17 @@ const compat = new FlatCompat({
 })
 
 const eslintConfig = [
-  ...compat.extends('next/core-web-vitals', 'next/typescript', '@feature-sliced'),
-  ...compat.config({
-    parserOptions: {
-      project: './tsconfig.json',
-      tsconfigRootDir: __dirname,
+  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  {
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      parserOptions: {
+        project: './tsconfig.json',
+        tsconfigRootDir: __dirname,
+      },
     },
-  }),
+  },
   {
     plugins: {
       boundaries,
