@@ -1,9 +1,6 @@
-import RichText from '@/components/elements/RichText'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { AvatarProfilePhoto } from '@/components/untitled/base/avatar/avatar-profile-photo'
-import { Button } from '@/components/untitled/base/buttons/button'
 import { payloadClient } from '@/services/payload/client'
-import { ArrowLeft } from '@untitledui/icons'
 import { draftMode } from 'next/headers'
 import { unstable_cache } from 'next/cache'
 
@@ -54,7 +51,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
           style={{
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            backgroundImage: `url(${user.cover?.url as string})`,
+            backgroundImage: `url(${user.cover && typeof user.cover === 'object' && 'url' in user.cover ? user.cover.url : 'https://www.untitledui.com/images/avatars/olivia-rhye?fm=webp&q=80'})`,
           }}
         />
 
@@ -80,7 +77,9 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
               src={
                 user.avatar && typeof user.avatar === 'object' && 'url' in user.avatar
                   ? user.avatar.sizes?.thumbnail?.url
-                  : (user?.avatar?.url as string)
+                  : user.avatar && typeof user.avatar === 'object' && 'url' in user.avatar
+                    ? user.avatar.url
+                    : 'https://www.untitledui.com/images/avatars/olivia-rhye?fm=webp&q=80'
               }
               alt={user.name || username}
             />
@@ -100,6 +99,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
           </div>
         </div>
       </div>
+      <pre>{JSON.stringify(user, null, 2)}</pre>
     </div>
   )
 }

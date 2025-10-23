@@ -16,7 +16,7 @@ export const Users: CollectionConfig = {
   slug: 'users',
 
   access: {
-    create: isAdmin,
+    create: () => false,
     read: isAdminOrSelf,
     update: isAdminOrSelf,
     delete: isAdmin,
@@ -133,21 +133,37 @@ export const Users: CollectionConfig = {
           ],
         },
         {
+          label: 'Links',
+          name: 'links',
+          fields: [
+            { name: 'website', type: 'text', admin: { placeholder: 'https://www.example.com' } },
+            { name: 'X (Twitter)', type: 'text', admin: { placeholder: 'https://x.com/example' } },
+            {
+              name: 'instagram',
+              type: 'text',
+              admin: { placeholder: 'https://www.instagram.com/example' },
+            },
+            {
+              name: 'linkedin',
+              type: 'text',
+              admin: { placeholder: 'https://www.linkedin.com/in/example' },
+            },
+            {
+              name: 'youtube',
+              type: 'text',
+              admin: { placeholder: 'https://www.youtube.com/example' },
+            },
+            {
+              name: 'tiktok',
+              type: 'text',
+              admin: { placeholder: 'https://www.tiktok.com/@example' },
+            },
+          ],
+        },
+        {
           label: 'Orders',
 
           fields: [
-            {
-              name: 'offers',
-              type: 'join',
-              collection: 'offers',
-              admin: {
-                defaultColumns: ['title', 'createdAt'],
-                disableListColumn: true,
-                disableListFilter: true,
-              },
-              orderable: false,
-              on: tenantFieldSlug,
-            },
             {
               name: 'orders',
               type: 'join',
