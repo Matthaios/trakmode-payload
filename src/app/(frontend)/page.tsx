@@ -18,7 +18,7 @@ import { X, Facebook, LinkedIn, Instagram } from '@/components/untitled/foundati
 export default function HomePage() {
   const [faqOpen, setFaqOpen] = useState<string | null>(null)
   const [email, setEmail] = useState('')
-  const [showApplicationReceived, setShowApplicationReceived] = useState(false)
+  const [showApplicationReceived, setShowApplicationReceived] = useState(false);
 
   const toggleFaq = (id: string) => {
     setFaqOpen(faqOpen === id ? null : id)
