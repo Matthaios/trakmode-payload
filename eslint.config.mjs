@@ -91,7 +91,7 @@ const eslintConfig = [
     },
   },
   {
-    ignores: ['.next/', '.repo/'],
+    ignores: ['.next/', '.repo/', '.scripts/'],
   },
 ]
 
