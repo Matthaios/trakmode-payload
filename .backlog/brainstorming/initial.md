@@ -3,7 +3,6 @@
 Main purpose of the Trakmode is to help audio creators to create a profile page for their music and connect with their fans. It should be a good replacement for Komi, Linktree, Patreon and other similar platforms.
 
 
-
 ### Profile page features
 
 Profile page is the main feature of Trakmode. Users should be able to create a profile and have a simple url to it. Ex. trakmode.com/johndoe, trak.link/johndoe, or similar. domain/[username].
@@ -25,3 +24,9 @@ Profile page is the main feature of Trakmode. Users should be able to create a p
 **Image block**: This will let creator add an image to their profile page.
 
 **Video block**: This will let creator add a video to their profile page.
+
+**Offers block**: This will let creator add a list of offers to their profile page.
+
+### Offers
+
+Offers are one of the main aspects or one of the main features of the marketplace, so any audio engineer should be able to upload files that he's going to offer for a given amount. Maybe they will give them options to bundle a bunch of files into a single offer, or maybe multiple files could become a collection, so you would actually sell access to the collection. But in essence, they should be able to upload their files, create offers, and sell them on this profile page.
