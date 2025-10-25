@@ -12,9 +12,9 @@ import {
 import { useState } from 'react'
 import Link from 'next/link'
 import { Logo } from '@/components/elements/Logo'
-import { Button } from '@/components/untitled/base/buttons/button'
-import { Input } from '@/components/untitled/base/input/input'
-import { X, Facebook, LinkedIn, Instagram } from '@/components/untitled/foundations/social-icons'
+import { Button } from '@/components/ui/base/buttons/button'
+import { Input } from '@/components/ui/base/input/input'
+import { X, Facebook, LinkedIn, Instagram } from '@/components/ui/foundations/social-icons'
 export default function HomePage() {
   const [faqOpen, setFaqOpen] = useState<string | null>(null)
   const [email, setEmail] = useState('')

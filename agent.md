@@ -1,7 +1,7 @@
 
 # Trakmode AI Agent & Developer Guide
 
-Important whenever you are planning, make sure to create tasks in that backlog folder similar as you would in some other project tracking software. I want to have markdowns where in the header of the markdown there will be a project status and maybe some other things.
+Important whenever you are planning, make sure to create tasks in that .backlog folder similar as you would in some other project tracking software. I want to have markdowns where in the header of the markdown there will be a project status and maybe some other things.
 
 This document outlines the architectural principles and code organization strategy for the Trakmode Next.js project. Its purpose is to ensure the codebase remains maintainable, searchable, and scalable. All new code should adhere to these guidelines.
 

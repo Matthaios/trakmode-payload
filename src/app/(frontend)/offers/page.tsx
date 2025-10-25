@@ -1,6 +1,6 @@
 import { payloadClient } from '@/services/payload/client'
 import Link from 'next/link'
-import { Button } from '@/components/untitled/base/buttons/button'
+import { Button } from '@/components/ui/base/buttons/button'
 
 export default async function Page() {
   const payload = await payloadClient()
