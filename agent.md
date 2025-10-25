@@ -5,6 +5,8 @@ Use Linear MCP to create tasks and see what tasks are there to do. Add "Trackmod
 
 Important: we are using bun as package manager. Use bun to install dependencies and run the project. Avoid building project unless explicitly asked.
 
+
+
 This document outlines the architectural principles and code organization strategy for the Trakmode Next.js project. Its purpose is to ensure the codebase remains maintainable, searchable, and scalable. All new code should adhere to these guidelines.
 
 ## 1. Core Architectural Principles
