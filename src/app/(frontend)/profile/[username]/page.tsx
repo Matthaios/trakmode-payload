@@ -12,6 +12,7 @@ import { ServicesSection } from '@/widgets/ProfileSections/ui/ServicesSection'
 import { TutorialsSection } from '@/widgets/ProfileSections/ui/TutorialsSection'
 import { AboutSection } from '@/widgets/ProfileSections/ui/AboutSection'
 import { FindOutMoreSection } from '@/widgets/ProfileSections/ui/FindOutMoreSection'
+import { LinksSection } from '@/widgets/ProfileSections/ui/LinksSection'
 import { draftMode } from 'next/headers'
 import { unstable_cache } from 'next/cache'
 
@@ -41,6 +42,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
     'Listen',
     'Merch',
     'Follow',
+    'Links',
     'Find Out More',
     'Services',
     'Tutorials',
@@ -62,6 +64,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
         <ListenSection />
         <MerchSection />
         <FollowSection />
+        <LinksSection user={user} />
         <ServicesSection />
         <TutorialsSection />
         <AboutSection />

@@ -1,5 +1,5 @@
 import { AvatarProfilePhoto } from '@/shared/ui/base/avatar/avatar-profile-photo'
-import { Instagram, X, YouTube, Layers } from '@/shared/ui/foundations/social-icons'
+import { getAvailableLinks, linkConfigs } from '@/features/links/utils'
 import type { UserProfile } from '@/entities/user/model/types'
 
 interface ProfileHeaderProps {
@@ -8,6 +8,8 @@ interface ProfileHeaderProps {
 }
 
 export function ProfileHeader({ user, username }: ProfileHeaderProps) {
+  const availableLinks = getAvailableLinks(user.links)
+
   return (
     <div className="relative flex flex-col items-center bg-primary px-1 pt-1">
       {/* Cover Image */}
@@ -60,20 +62,25 @@ export function ProfileHeader({ user, username }: ProfileHeaderProps) {
             </div>
 
             {/* Social Media Links */}
-            <div className="flex gap-4">
-              <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center">
-                <Instagram className="w-4 h-4 text-tertiary" />
+            {availableLinks.length > 0 && (
+              <div className="flex gap-4">
+                {availableLinks.map((link) => {
+                  const Icon = link.config.icon
+                  return (
+                    <a
+                      key={link.type}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center hover:bg-tertiary transition-colors"
+                      aria-label={`${link.config.label} profile`}
+                    >
+                      <Icon className="w-4 h-4 text-tertiary hover:text-primary" />
+                    </a>
+                  )
+                })}
               </div>
-              <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center">
-                <X className="w-4 h-4 text-tertiary" />
-              </div>
-              <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center">
-                <YouTube className="w-4 h-4 text-tertiary" />
-              </div>
-              <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center">
-                <Layers className="w-4 h-4 text-tertiary" />
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
