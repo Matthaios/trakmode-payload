@@ -1,5 +1,5 @@
 // import "dotenv/config";
-import { env } from '@/env'
+import { env } from '@/shared/config/env'
 import { drizzle } from 'drizzle-orm/libsql'
 
 // You can specify any property from the libsql connection options

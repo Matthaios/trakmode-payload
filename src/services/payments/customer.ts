@@ -7,7 +7,7 @@ import { user } from '@/services/auth/schema'
 import { auth } from '@/services/auth'
 import { headers } from 'next/headers'
 import Stripe from 'stripe'
-import { payloadClient } from '@/services/payload/client'
+import { payloadClient } from '@/payload/client'
 
 export async function getOrCreateCustomer(
   userId: string,

@@ -20,11 +20,7 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@/ui/*": ["./src/components/untitled/*"],
-      "@/payload/*": ["./src/services/payload/*"],
-      "@/auth/*": ["./src/services/auth/*"],
-      "@/payments/*": ["./src/services/payments/*"],
-      "@payload-config": ["./src/payload.config.ts"]
+      "@payload-config": ["./src/payload/config.ts"]
     },
     "target": "ES2022"
   },

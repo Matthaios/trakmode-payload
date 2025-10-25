@@ -3,7 +3,7 @@ import Stripe from 'stripe'
 import { headers } from 'next/headers'
 import { stripe } from '@/services/payments/stripe'
 import { NextResponse } from 'next/server'
-import { env } from '@/env'
+import { env } from '@/shared/config/env'
 
 export async function POST(req: Request) {
   let event: Stripe.Event

@@ -5,7 +5,7 @@ import { draftMode } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 import configPromise from '@payload-config'
-import { env } from '@/env'
+import { env } from '@/shared/config/env'
 
 export async function GET(
   req: {

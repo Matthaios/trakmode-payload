@@ -1,5 +1,5 @@
 // import "dotenv/config";
-import { env } from '@/env'
+import { env } from '@/shared/config/env'
 import { drizzle } from 'drizzle-orm/libsql'
 import * as schema from './schema'
 

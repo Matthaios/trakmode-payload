@@ -11,10 +11,10 @@ import {
 } from 'lucide-react'
 import { useState } from 'react'
 import Link from 'next/link'
-import { Logo } from '@/components/elements/Logo'
-import { Button } from '@/components/ui/base/buttons/button'
-import { Input } from '@/components/ui/base/input/input'
-import { X, Facebook, LinkedIn, Instagram } from '@/components/ui/foundations/social-icons'
+import { Logo } from '@/shared/ui/elements/Logo'
+import { Button } from '@/shared/ui/base/buttons/button'
+import { Input } from '@/shared/ui/base/input/input'
+import { X, Facebook, LinkedIn, Instagram } from '@/shared/ui/foundations/social-icons'
 export default function HomePage() {
   const [faqOpen, setFaqOpen] = useState<string | null>(null)
   const [email, setEmail] = useState('')

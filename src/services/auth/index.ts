@@ -7,10 +7,10 @@ import { nextCookies } from 'better-auth/next-js'
 import { magicLink, openAPI, twoFactor } from 'better-auth/plugins'
 
 import { createNewUser } from '@/payload/collections/Users/actions/create-new-user'
-import { env } from '@/env'
+import { env } from '@/shared/config/env'
 import { createOrFindCustomer } from '../payments/utils/create-stripe-user'
 import { headers } from 'next/headers'
-import { payloadClient } from '../payload/client'
+import { payloadClient } from '@/payload/client'
 
 // your drizzle instance
 export const auth = betterAuth({

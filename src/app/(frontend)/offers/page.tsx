@@ -1,13 +1,8 @@
-import { payloadClient } from '@/services/payload/client'
-import Link from 'next/link'
-import { Button } from '@/components/ui/base/buttons/button'
+import { getOffers } from '@/entities/offer/api/getOffers'
+import { Button } from '@/shared/ui/base/buttons/button'
 
 export default async function Page() {
-  const payload = await payloadClient()
-  const offers = await payload.find({
-    collection: 'offers',
-    limit: 10,
-  })
+  const offers = await getOffers(10)
 
   return (
     <div className="min-h-screen bg-[#0B0B0D] text-[#EDEFF2]">
