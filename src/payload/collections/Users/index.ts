@@ -130,40 +130,78 @@ export const Users: CollectionConfig = {
             { name: 'bio', type: 'richText' },
             { name: 'avatar', type: 'upload', relationTo: 'media' },
             { name: 'cover', type: 'upload', relationTo: 'media' },
+            {
+              type: 'collapsible',
+              label: 'Links',
+
+              fields: [
+                {
+                  name: 'links',
+                  label: false,
+                  type: 'group',
+                  fields: [
+                    {
+                      name: 'website',
+                      type: 'text',
+                      admin: { placeholder: 'https://www.example.com' },
+                    },
+                    {
+                      name: 'twitter',
+                      label: 'X (Twitter)',
+                      type: 'text',
+                      admin: { placeholder: 'https://x.com/example' },
+                    },
+                    {
+                      name: 'instagram',
+                      type: 'text',
+                      admin: { placeholder: 'https://www.instagram.com/example' },
+                    },
+                    {
+                      name: 'linkedin',
+                      type: 'text',
+                      admin: { placeholder: 'https://www.linkedin.com/in/example' },
+                    },
+                    {
+                      name: 'youtube',
+                      type: 'text',
+                      admin: { placeholder: 'https://www.youtube.com/example' },
+                    },
+                    {
+                      name: 'tiktok',
+                      type: 'text',
+                      admin: { placeholder: 'https://www.tiktok.com/@example' },
+                    },
+                  ],
+                },
+              ],
+            },
           ],
         },
         {
-          label: 'Links',
-          name: 'links',
+          name: 'profile',
           fields: [
-            { name: 'website', type: 'text', admin: { placeholder: 'https://www.example.com' } },
             {
-              name: 'twitter',
-              label: 'X (Twitter)',
-              type: 'text',
-              admin: { placeholder: 'https://x.com/example' },
-            },
-            {
-              name: 'instagram',
-              type: 'text',
-              admin: { placeholder: 'https://www.instagram.com/example' },
-            },
-            {
-              name: 'linkedin',
-              type: 'text',
-              admin: { placeholder: 'https://www.linkedin.com/in/example' },
-            },
-            {
-              name: 'youtube',
-              type: 'text',
-              admin: { placeholder: 'https://www.youtube.com/example' },
-            },
-            {
-              name: 'tiktok',
-              type: 'text',
-              admin: { placeholder: 'https://www.tiktok.com/@example' },
+              name: 'content',
+              type: 'blocks',
+              blocks: [
+                {
+                  slug: 'youtube-videos',
+                  labels: {
+                    singular: 'Youtube Videos',
+                    plural: 'Youtube Videos',
+                  },
+                  fields: [
+                    {
+                      name: 'videos',
+                      type: 'array',
+                      fields: [{ name: 'video', type: 'text' }],
+                    },
+                  ],
+                },
+              ],
             },
           ],
+          label: 'Profile',
         },
       ],
     },

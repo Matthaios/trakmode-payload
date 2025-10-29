@@ -164,6 +164,21 @@ export interface User {
     youtube?: string | null;
     tiktok?: string | null;
   };
+  profile?: {
+    content?:
+      | {
+          videos?:
+            | {
+                video?: string | null;
+                id?: string | null;
+              }[]
+            | null;
+          id?: string | null;
+          blockName?: string | null;
+          blockType: 'youtube-videos';
+        }[]
+      | null;
+  };
   role?: ('admin' | 'creator' | 'user') | null;
   updatedAt: string;
   createdAt: string;
@@ -426,6 +441,26 @@ export interface UsersSelect<T extends boolean = true> {
         linkedin?: T;
         youtube?: T;
         tiktok?: T;
+      };
+  profile?:
+    | T
+    | {
+        content?:
+          | T
+          | {
+              'youtube-videos'?:
+                | T
+                | {
+                    videos?:
+                      | T
+                      | {
+                          video?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                    blockName?: T;
+                  };
+            };
       };
   role?: T;
   updatedAt?: T;
