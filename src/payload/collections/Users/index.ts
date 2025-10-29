@@ -6,16 +6,16 @@ import { betterAuthStrategy } from './strategies/better-auth'
 
 import { isAdminField } from '@/payload/access/fields'
 import { formatSlugHook } from '@/payload/fields/slug/formatSlug'
-import { getServerSideURL } from '@/shared/lib/utils/getURL'
 import { privateField } from '@/payload/utils/fields'
+import { getServerSideURL } from '@/shared/lib/utils/getURL'
 import { revalidateTag } from 'next/cache'
-import { tenantFieldSlug } from '@/payload/plugins/tenant'
+import { slugField } from '@/payload/fields/slug'
 
 export const Users: CollectionConfig = {
   slug: 'users',
   labels: {
-    singular: 'Account',
-    plural: 'Account',
+    singular: 'Profile',
+    plural: 'Profile',
   },
 
   access: {
@@ -26,8 +26,7 @@ export const Users: CollectionConfig = {
   },
   hooks: {
     beforeValidate: [
-      ({ data, req }) => {
-        // @ts-ignore
+      ({ data }) => {
         if (!data?.id) {
           throw new Error('ID is required')
         }
@@ -82,6 +81,7 @@ export const Users: CollectionConfig = {
       name: 'stripeCustomerId',
       type: 'text',
     }),
+
     {
       name: 'username',
       type: 'text',

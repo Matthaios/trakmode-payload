@@ -54,7 +54,6 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
       {draft && <LivePreviewListener />}
 
       <ProfileHeader user={user} username={username} />
-      <ProfileNav sections={navSections} />
 
       {/* Content Sections */}
       <div className="max-w-4xl mx-auto px-3 md:px-8 py-8 space-y-12">
