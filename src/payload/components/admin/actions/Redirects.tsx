@@ -13,5 +13,5 @@ export default async function AdminRedirects(props: ServerProps) {
   }
   payload.logger.info(path)
 
-  return <span>REDIRECTS</span>
+  return null
 }
