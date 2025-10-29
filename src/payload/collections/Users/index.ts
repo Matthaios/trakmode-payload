@@ -7,12 +7,16 @@ import { betterAuthStrategy } from './strategies/better-auth'
 import { isAdminField } from '@/payload/access/fields'
 import { formatSlugHook } from '@/payload/fields/slug/formatSlug'
 import { getServerSideURL } from '@/shared/lib/utils/getURL'
-import { privateField } from '../../utils/fields'
+import { privateField } from '@/payload/utils/fields'
 import { revalidateTag } from 'next/cache'
-import { tenantFieldSlug } from '../../plugins/tenant'
+import { tenantFieldSlug } from '@/payload/plugins/tenant'
 
 export const Users: CollectionConfig = {
   slug: 'users',
+  labels: {
+    singular: 'Account',
+    plural: 'Account',
+  },
 
   access: {
     create: () => false,
@@ -43,9 +47,6 @@ export const Users: CollectionConfig = {
     group: 'User Management',
     hideAPIURL: true,
     useAsTitle: 'name',
-    hidden: ({ user }) => {
-      return user?.role !== 'admin'
-    },
 
     livePreview: {
       url: ({ data }) => {
@@ -161,21 +162,6 @@ export const Users: CollectionConfig = {
               name: 'tiktok',
               type: 'text',
               admin: { placeholder: 'https://www.tiktok.com/@example' },
-            },
-          ],
-        },
-        {
-          label: 'Orders',
-
-          fields: [
-            {
-              name: 'orders',
-              type: 'join',
-              collection: 'orders',
-              on: tenantFieldSlug,
-              admin: {
-                allowCreate: false,
-              },
             },
           ],
         },

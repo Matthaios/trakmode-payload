@@ -1,21 +1,16 @@
-import { Session } from '@/services/auth'
 import { payloadClient } from '@/payload/client'
-import { createNewUser } from './create-new-user'
+import { User } from '@/payload/payload-types'
+import { Session } from '@/services/auth'
 import { getOrCreateCustomer } from '@/services/payments/customer'
-import { tenantFieldSlug } from '@/payload/plugins/tenant'
+import { createNewUser } from './create-new-user'
 async function getUserFromPayload(id: string) {
   const payload = await payloadClient()
-  const { docs } = await payload.find({
+  const user = await payload.findByID({
     collection: 'users',
-    where: {
-      [tenantFieldSlug]: {
-        equals: id,
-      },
-    },
-    limit: 1,
+    id,
   })
 
-  return docs?.[0]
+  return user as User
 }
 export const findOrCreateUser = async (user: Session['user']) => {
   let userDoc = await getUserFromPayload(user.id)

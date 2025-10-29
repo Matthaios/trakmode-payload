@@ -67,30 +67,27 @@ export interface Config {
   };
   blocks: {};
   collections: {
+    users: User;
+    orders: Order;
     offers: Offer;
     media: Media;
     private: Private;
-    orders: Order;
-    users: User;
     folders: FolderInterface;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
   collectionsJoins: {
-    users: {
-      orders: 'orders';
-    };
     folders: {
       documentsAndFolders: 'folders' | 'media' | 'private';
     };
   };
   collectionsSelect: {
+    users: UsersSelect<false> | UsersSelect<true>;
+    orders: OrdersSelect<false> | OrdersSelect<true>;
     offers: OffersSelect<false> | OffersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     private: PrivateSelect<false> | PrivateSelect<true>;
-    orders: OrdersSelect<false> | OrdersSelect<true>;
-    users: UsersSelect<false> | UsersSelect<true>;
     folders: FoldersSelect<false> | FoldersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -130,18 +127,6 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "offers".
- */
-export interface Offer {
-  id: string;
-  title: string;
-  price: number;
-  user: string | User;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -178,11 +163,6 @@ export interface User {
     linkedin?: string | null;
     youtube?: string | null;
     tiktok?: string | null;
-  };
-  orders?: {
-    docs?: (string | Order)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
   };
   role?: ('admin' | 'creator' | 'user') | null;
   updatedAt: string;
@@ -340,11 +320,31 @@ export interface Order {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "offers".
+ */
+export interface Offer {
+  id: string;
+  title: string;
+  price: number;
+  user: string | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
   id: string;
   document?:
+    | ({
+        relationTo: 'users';
+        value: string | User;
+      } | null)
+    | ({
+        relationTo: 'orders';
+        value: string | Order;
+      } | null)
     | ({
         relationTo: 'offers';
         value: string | Offer;
@@ -356,14 +356,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'private';
         value: string | Private;
-      } | null)
-    | ({
-        relationTo: 'orders';
-        value: string | Order;
-      } | null)
-    | ({
-        relationTo: 'users';
-        value: string | User;
       } | null)
     | ({
         relationTo: 'folders';
@@ -410,6 +402,50 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users_select".
+ */
+export interface UsersSelect<T extends boolean = true> {
+  id?: T;
+  stripeCustomerId?: T;
+  username?: T;
+  email?: T;
+  name?: T;
+  tagline?: T;
+  bio?: T;
+  avatar?: T;
+  cover?: T;
+  links?:
+    | T
+    | {
+        website?: T;
+        twitter?: T;
+        instagram?: T;
+        linkedin?: T;
+        youtube?: T;
+        tiktok?: T;
+      };
+  role?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders_select".
+ */
+export interface OrdersSelect<T extends boolean = true> {
+  orderId?: T;
+  offerId?: T;
+  stripePaymentIntentId?: T;
+  amount?: T;
+  currency?: T;
+  purchaseDate?: T;
+  status?: T;
+  user?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -538,51 +574,6 @@ export interface PrivateSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "orders_select".
- */
-export interface OrdersSelect<T extends boolean = true> {
-  orderId?: T;
-  offerId?: T;
-  stripePaymentIntentId?: T;
-  amount?: T;
-  currency?: T;
-  purchaseDate?: T;
-  status?: T;
-  user?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
- */
-export interface UsersSelect<T extends boolean = true> {
-  id?: T;
-  stripeCustomerId?: T;
-  username?: T;
-  email?: T;
-  name?: T;
-  tagline?: T;
-  bio?: T;
-  avatar?: T;
-  cover?: T;
-  links?:
-    | T
-    | {
-        website?: T;
-        twitter?: T;
-        instagram?: T;
-        linkedin?: T;
-        youtube?: T;
-        tiktok?: T;
-      };
-  orders?: T;
-  role?: T;
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

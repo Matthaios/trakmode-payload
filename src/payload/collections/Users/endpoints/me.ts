@@ -1,7 +1,7 @@
 import { auth } from '@/services/auth'
 import { headers } from 'next/headers'
 import { Endpoint } from 'payload'
-import { findOrCreateUser } from '../actions/find-or-create-user'
+import { findOrCreateUser } from '@/payload/collections/Users/actions/find-or-create-user'
 
 export const meEndpoint: Endpoint = {
   path: '/me',

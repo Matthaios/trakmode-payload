@@ -1,3 +1,4 @@
+import { account } from './../services/auth/schema'
 // storage-adapter-import-placeholder
 import { env } from '@/shared/config/env'
 import { collections } from '@/payload/collections'
@@ -20,6 +21,9 @@ export default buildConfig({
   },
 
   admin: {
+    avatar: {
+      Component: '@/payload/components/admin/account/Avatar.tsx',
+    },
     theme: 'dark',
     meta: {
       title: 'Trakmode',
@@ -34,11 +38,17 @@ export default buildConfig({
     },
 
     components: {
+      actions: [
+        {
+          path: '@/payload/components/admin/actions/Redirects.tsx',
+        },
+      ],
       logout: {
         Button: {
           path: '@/payload/components/admin/logout/LogoutButton.tsx#LogoutButton',
         },
       },
+
       graphics: {
         Logo: {
           path: '@/payload/components/admin/graphics/logo.tsx#Logo',
