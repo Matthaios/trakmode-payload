@@ -1,20 +1,11 @@
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { getUserProfile } from '@/entities/user/api/getUserProfile'
 import { ProfileHeader } from '@/features/user-profile/ui/ProfileHeader'
-import { ProfileNav } from '@/features/user-profile/ui/ProfileNav'
-import { TourSection } from '@/widgets/ProfileSections/ui/TourSection'
-import { MusicSection } from '@/widgets/ProfileSections/ui/MusicSection'
-import { FeaturedVideosSection } from '@/widgets/ProfileSections/ui/FeaturedVideosSection'
-import { ListenSection } from '@/widgets/ProfileSections/ui/ListenSection'
-import { MerchSection } from '@/widgets/ProfileSections/ui/MerchSection'
-import { FollowSection } from '@/widgets/ProfileSections/ui/FollowSection'
-import { ServicesSection } from '@/widgets/ProfileSections/ui/ServicesSection'
-import { TutorialsSection } from '@/widgets/ProfileSections/ui/TutorialsSection'
-import { AboutSection } from '@/widgets/ProfileSections/ui/AboutSection'
-import { FindOutMoreSection } from '@/widgets/ProfileSections/ui/FindOutMoreSection'
+import { BlocksRenderer } from '@/features/profile-blocks/ui/BlockRenderer'
 import { LinksSection } from '@/widgets/ProfileSections/ui/LinksSection'
 import { draftMode } from 'next/headers'
 import { unstable_cache } from 'next/cache'
+import type { ProfileBlock } from '@/features/profile-blocks/model/types'
 
 export default async function ProfilePage({ params }: { params: Promise<{ username: string }> }) {
   const { username } = await params
@@ -35,19 +26,11 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
     )
   }
 
-  const navSections = [
-    'Tour',
-    'Music',
-    'Featured Videos',
-    'Listen',
-    'Merch',
-    'Follow',
-    'Links',
-    'Find Out More',
-    'Services',
-    'Tutorials',
-    'About',
-  ]
+  // Extract blocks from profile.content, filtering out invalid blocks
+  const blocks: ProfileBlock[] =
+    (user.profile?.content?.filter((block): block is ProfileBlock => {
+      return block !== null && typeof block === 'object' && 'blockType' in block
+    }) as ProfileBlock[]) || []
 
   return (
     <div>
@@ -57,17 +40,8 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
 
       {/* Content Sections */}
       <div className="max-w-4xl mx-auto px-3 md:px-8 py-8 space-y-12">
-        <TourSection />
-        <MusicSection />
-        <FeaturedVideosSection />
-        <ListenSection />
-        <MerchSection />
-        <FollowSection />
+        <BlocksRenderer blocks={blocks} />
         <LinksSection user={user} />
-        <ServicesSection />
-        <TutorialsSection />
-        <AboutSection />
-        <FindOutMoreSection />
       </div>
     </div>
   )
