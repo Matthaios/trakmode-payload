@@ -1,9 +1,36 @@
-import UrlPattern from 'url-pattern'
 import qs from 'query-string'
 
 /**
  * YouTube utility functions for URL parsing and validation
  */
+
+/**
+ * Extracts video ID from YouTube URL pathname using regex patterns
+ * Supports: youtu.be/:videoId, youtube.com/v/:videoId, youtube.com/embed/:videoId
+ */
+function extractVideoIdFromPath(url: URL): string | null {
+  const pathname = url.pathname
+  const hostname = url.hostname
+
+  // Match youtu.be/:videoId (with optional www. prefix in hostname)
+  if (hostname === 'youtu.be' || hostname === 'www.youtu.be') {
+    const match = pathname.match(/^\/([a-zA-Z0-9_-]{11})(?:\/.*)?$/)
+    if (match) return match[1]
+  }
+
+  // Match youtube.com/v/:videoId (with optional www. prefix in hostname)
+  if (hostname === 'youtube.com' || hostname === 'www.youtube.com') {
+    // Match /v/:videoId
+    const directMatch = pathname.match(/^\/v\/([a-zA-Z0-9_-]{11})(?:\/.*)?$/)
+    if (directMatch) return directMatch[1]
+
+    // Match /embed/:videoId
+    const embedMatch = pathname.match(/^\/embed\/([a-zA-Z0-9_-]{11})(?:\/.*)?$/)
+    if (embedMatch) return embedMatch[1]
+  }
+
+  return null
+}
 
 // Returns YouTube Player API options from a YouTube URL.
 //  ie. { playlistId }
@@ -12,9 +39,26 @@ import qs from 'query-string'
 export function parseYouTubeUrl(url: string) {
   if (!url) return {}
 
-  const [domain, querystring] = url.split('?')
+  let parsedUrl: URL
+  try {
+    // If URL doesn't have a protocol, add https:// for parsing
+    const urlToParse =
+      url.startsWith('http://') || url.startsWith('https://') ? url : `https://${url}`
+    parsedUrl = new URL(urlToParse)
+  } catch {
+    // If URL parsing fails, treat as direct video ID
+    // Check if it looks like a video ID (11 characters, alphanumeric with dashes/underscores)
+    if (/^[a-zA-Z0-9_-]{11}$/.test(url)) {
+      return { videoId: url }
+    }
+    return {}
+  }
+
   const options: any = {}
-  const query = qs.parse(querystring)
+
+  // Parse query string if present
+  const queryString = parsedUrl.search.slice(1) // Remove leading '?'
+  const query = queryString ? qs.parse(queryString) : {}
 
   if (query.list && typeof query.list === 'string') {
     // URLs with a playlist can also have a video id so we need to check
@@ -30,18 +74,10 @@ export function parseYouTubeUrl(url: string) {
     //    ie. https://youtu.be/:videoId
     //        https://www.youtube.com/v/:videoId
     //        https://www.youtube.com/embed/:videoId
-    const shortVideo = new UrlPattern('(http(s)\\://)(www.)youtu.be/:videoId')
-    const directVideo = new UrlPattern('(http(s)\\://)(www.)youtube.com/v/:videoId')
-    const embedVideo = new UrlPattern('(http(s)\\://)(www.)youtube.com/embed/:videoId')
-
-    let params = shortVideo.match(domain)
-    if (params) options.videoId = params.videoId
-
-    params = directVideo.match(domain)
-    if (params) options.videoId = params.videoId
-
-    params = embedVideo.match(domain)
-    if (params) options.videoId = params.videoId
+    const videoId = extractVideoIdFromPath(parsedUrl)
+    if (videoId) {
+      options.videoId = videoId
+    }
   }
 
   // Check for start and end times for single videos.
