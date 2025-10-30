@@ -166,28 +166,64 @@ export interface User {
   };
   profile?: {
     content?:
-      | {
-          /**
-           * Title displayed above the videos
-           */
-          title?: string | null;
-          videos?:
-            | {
-                /**
-                 * Enter a YouTube video URL. Supports various YouTube URL formats.
-                 */
-                video?: string | null;
-                id?: string | null;
-              }[]
-            | null;
-          /**
-           * Number of videos shown before collapse (when more videos are available)
-           */
-          collapseCount?: number | null;
-          id?: string | null;
-          blockName?: string | null;
-          blockType: 'youtube-video-block';
-        }[]
+      | (
+          | {
+              /**
+               * Title displayed above the videos
+               */
+              title?: string | null;
+              videos?:
+                | {
+                    /**
+                     * Enter a YouTube video URL. Supports various YouTube URL formats.
+                     */
+                    video?: string | null;
+                    id?: string | null;
+                  }[]
+                | null;
+              /**
+               * Number of videos shown before collapse (when more videos are available)
+               */
+              collapseCount?: number | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'youtube-video-block';
+            }
+          | {
+              /**
+               * Title displayed above the audio players
+               */
+              title?: string | null;
+              audioFiles?:
+                | {
+                    /**
+                     * Title of the audio track
+                     */
+                    trackTitle: string;
+                    /**
+                     * Optional subtitle or collection name
+                     */
+                    subtitle?: string | null;
+                    /**
+                     * Upload an audio file (MP3, WAV, M4A, etc.)
+                     */
+                    audioFile: string | Media;
+                    /**
+                     * Optional thumbnail image for the audio player
+                     */
+                    thumbnail?: (string | null) | Media;
+                    id?: string | null;
+                  }[]
+                | null;
+              /**
+               * Number of audio tracks shown before collapse (when more tracks are available)
+               */
+              collapseCount?: number | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'audio-player-block';
+            }
+        )[]
       | null;
   };
   role?: ('admin' | 'creator' | 'user') | null;
@@ -467,6 +503,23 @@ export interface UsersSelect<T extends boolean = true> {
                       | T
                       | {
                           video?: T;
+                          id?: T;
+                        };
+                    collapseCount?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              'audio-player-block'?:
+                | T
+                | {
+                    title?: T;
+                    audioFiles?:
+                      | T
+                      | {
+                          trackTitle?: T;
+                          subtitle?: T;
+                          audioFile?: T;
+                          thumbnail?: T;
                           id?: T;
                         };
                     collapseCount?: T;

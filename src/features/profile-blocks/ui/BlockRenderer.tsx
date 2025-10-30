@@ -1,5 +1,6 @@
 import type { ProfileBlock } from '@/features/profile-blocks/model/types'
 import { YouTubeVideoBlockRenderer } from '@/blocks/youtube-video-block/youtube-video-block'
+import { AudioPlayerBlockRenderer } from '@/blocks/audio-player-block/audio-player-block'
 
 interface BlockRendererProps {
   block: ProfileBlock
@@ -11,6 +12,7 @@ interface BlockRendererProps {
  */
 const blockRenderers = {
   'youtube-video-block': YouTubeVideoBlockRenderer,
+  'audio-player-block': AudioPlayerBlockRenderer,
 } as const
 
 /**
@@ -18,7 +20,7 @@ const blockRenderers = {
  * Maps block types to their corresponding renderer components
  */
 export function BlockRenderer({ block }: BlockRendererProps) {
-  const BlockComponent = blockRenderers[block.blockType]
+  const BlockComponent = blockRenderers[block.blockType as keyof typeof blockRenderers]
 
   if (!BlockComponent) {
     // Silently skip unknown block types in production
@@ -28,7 +30,7 @@ export function BlockRenderer({ block }: BlockRendererProps) {
     return null
   }
 
-  return <BlockComponent block={block} />
+  return <BlockComponent block={block as any} />
 }
 
 /**

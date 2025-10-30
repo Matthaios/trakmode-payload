@@ -1,22 +1,13 @@
 'use client'
 
 import { useState, useRef, useMemo, useEffect } from 'react'
-import { Play, Pause } from 'lucide-react'
+import { Play, Pause, ChevronDown } from 'lucide-react'
 import Image from 'next/image'
-
-interface AudioPlayerBlockData {
-  title?: string
-  audioFile?: string | { url: string } | { id: string; url?: string }
-  description?: string
-  thumbnail?: string | { url: string } | { id: string; url?: string }
-  source?: string
-  id?: string
-  blockName?: string
-  blockType: 'audio-player-block'
-}
+import { Button } from '@/shared/ui/base/buttons/button'
+import type { AudioPlayerBlock } from './audio-player-block.config'
 
 interface AudioPlayerBlockProps {
-  block: AudioPlayerBlockData
+  block: AudioPlayerBlock
 }
 
 /**
@@ -128,25 +119,23 @@ function Thumbnail({ url, alt }: { url: string; alt: string }) {
 
 /**
  * Title section component
- * Displays title (large, prominent) and source/collection (smaller, lighter text below)
+ * Displays title (large, prominent) and subtitle (smaller, lighter text below)
  */
 function TitleSection({
   title,
-  source,
+  subtitle,
   currentTime,
-  duration
+  duration,
 }: {
-  title?: string
-  source?: string
+  title: string
+  subtitle?: string
   currentTime?: number
   duration?: number
 }) {
-  if (!title && !source) return null
-
   return (
     <div className="flex flex-col min-w-0">
-      {title && <h3 className="text-base font-medium text-white truncate">{title}</h3>}
-      {source && <span className="text-xs text-gray-400 truncate">{source}</span>}
+      <h3 className="text-base font-medium text-white truncate">{title}</h3>
+      {subtitle && <span className="text-xs text-gray-400 truncate">{subtitle}</span>}
       {duration && duration > 0 && (
         <div className="text-xs text-white mt-0.5">
           <span className="tabular-nums">
@@ -159,37 +148,35 @@ function TitleSection({
 }
 
 /**
- * Audio Player Block renderer component
- * Clean, minimal dark-themed audio player
+ * Single audio player component
  */
-export function AudioPlayerBlockRenderer({ block }: AudioPlayerBlockProps) {
-  const [isPlaying, setIsPlaying] = useState(false)
+function SingleAudioPlayer({
+  track,
+  isMobile,
+  isPlaying,
+  onPlay,
+  onPause,
+  trackIndex,
+}: {
+  track: NonNullable<AudioPlayerBlock['audioFiles']>[number]
+  isMobile: boolean
+  isPlaying: boolean
+  onPlay: () => void
+  onPause: () => void
+  trackIndex: number
+}) {
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
-  const [isMobile, setIsMobile] = useState(false)
   const audioRef = useRef<HTMLAudioElement>(null)
 
-  // Detect mobile screen size
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
-
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
-
   // Generate stable waveform bar heights
-  // More bars on desktop (160), fewer on mobile (80) for better performance
   const barCount = isMobile ? 80 : 160
   const waveformHeights = useMemo(() => {
     return Array.from({ length: barCount }).map(() => Math.random() * 0.5 + 0.3)
   }, [barCount])
 
-  const audioUrl = extractUrl(block.audioFile)
-  const thumbnailUrl = extractUrl(block.thumbnail)
+  const audioUrl = extractUrl(track.audioFile)
+  const thumbnailUrl = extractUrl(track.thumbnail)
 
   if (!audioUrl) {
     return null
@@ -202,10 +189,11 @@ export function AudioPlayerBlockRenderer({ block }: AudioPlayerBlockProps) {
 
     if (isPlaying) {
       audioRef.current.pause()
+      onPause()
     } else {
       audioRef.current.play()
+      onPlay()
     }
-    setIsPlaying(!isPlaying)
   }
 
   const handleTimeUpdate = () => {
@@ -234,33 +222,38 @@ export function AudioPlayerBlockRenderer({ block }: AudioPlayerBlockProps) {
     setCurrentTime(newTime)
   }
 
+  // Pause when another track starts playing
+  useEffect(() => {
+    if (!isPlaying && audioRef.current) {
+      audioRef.current.pause()
+    }
+  }, [isPlaying])
+
   return (
-    <section id="audio-player-block" className="w-full">
-      <div className="bg-gray-900 rounded-xl p-4 border border-gray-800">
-        {/* Single row: Thumbnail, Title/Subtitle/Time, Waveform, Play button */}
-        <div className="flex items-center gap-4">
-          {/* Thumbnail */}
-          {thumbnailUrl && <Thumbnail url={thumbnailUrl} alt={block.title || 'Audio track'} />}
+    <div className="bg-gray-900 rounded-xl p-4 border border-gray-800">
+      {/* Single row: Thumbnail, Title/Subtitle/Time, Waveform, Play button */}
+      <div className="flex items-center gap-4">
+        {/* Thumbnail */}
+        {thumbnailUrl && <Thumbnail url={thumbnailUrl} alt={track.trackTitle} />}
 
-          {/* Title Section with time display below - takes only needed space */}
-          <div className="flex-shrink-0">
-            <TitleSection
-              title={block.title}
-              source={block.source}
-              currentTime={currentTime}
-              duration={duration}
-            />
-          </div>
+        {/* Title Section with time display below - takes only needed space */}
+        <div className="flex-shrink-0">
+          <TitleSection
+            title={track.trackTitle}
+            subtitle={track.subtitle}
+            currentTime={currentTime}
+            duration={duration}
+          />
+        </div>
 
-          {/* Waveform bars - fills remaining space */}
-          {duration > 0 && (
-            <Waveform progress={progress} heights={waveformHeights} onSeek={handleSeek} />
-          )}
+        {/* Waveform bars - fills remaining space */}
+        {duration > 0 && (
+          <Waveform progress={progress} heights={waveformHeights} onSeek={handleSeek} />
+        )}
 
-          {/* Play Button on the right, vertically centered */}
-          <div className="flex-shrink-0">
-            <PlayButton isPlaying={isPlaying} onClick={togglePlay} />
-          </div>
+        {/* Play Button on the right, vertically centered */}
+        <div className="flex-shrink-0">
+          <PlayButton isPlaying={isPlaying} onClick={togglePlay} />
         </div>
       </div>
 
@@ -270,9 +263,97 @@ export function AudioPlayerBlockRenderer({ block }: AudioPlayerBlockProps) {
         src={audioUrl}
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
-        onEnded={() => setIsPlaying(false)}
+        onEnded={() => onPause()}
         preload="metadata"
       />
+    </div>
+  )
+}
+
+/**
+ * Audio Player Block renderer component
+ * Renders an array of audio players with expand/collapse functionality
+ */
+export function AudioPlayerBlockRenderer({ block }: AudioPlayerBlockProps) {
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+  const [currentlyPlayingIndex, setCurrentlyPlayingIndex] = useState<number | null>(null)
+
+  // Detect mobile screen size
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  if (!block.audioFiles || block.audioFiles.length === 0) {
+    return null
+  }
+
+  // Filter out invalid entries
+  const validAudioTracks = block.audioFiles.filter(
+    (track) => track.trackTitle && extractUrl(track.audioFile),
+  )
+
+  if (validAudioTracks.length === 0) {
+    return null
+  }
+
+  const noTracksToShow = block.collapseCount || 3
+  const hasMoreThanCount = validAudioTracks.length > noTracksToShow
+
+  return (
+    <section id="audio-player-block" className="w-full">
+      {/* Title */}
+      {block.title && (
+        <h2 className="text-2xl font-bold text-primary mb-6">{block.title}</h2>
+      )}
+
+      {/* Audio Players List */}
+      <div className="space-y-4">
+        {validAudioTracks.map((track, index) => {
+          // Only render tracks that should be visible
+          const isVisible = !hasMoreThanCount || isExpanded || index < noTracksToShow
+          if (!isVisible) return null
+
+          return (
+            <SingleAudioPlayer
+              key={track.id || index}
+              track={track}
+              isMobile={isMobile}
+              isPlaying={currentlyPlayingIndex === index}
+              onPlay={() => setCurrentlyPlayingIndex(index)}
+              onPause={() => setCurrentlyPlayingIndex(null)}
+              trackIndex={index}
+            />
+          )
+        })}
+      </div>
+
+      {/* Show More/Less Button */}
+      {hasMoreThanCount && (
+        <div className="flex justify-center mt-6">
+          <Button
+            size="md"
+            color="secondary"
+            onClick={() => setIsExpanded(!isExpanded)}
+            iconTrailing={
+              <ChevronDown
+                className={`w-4 h-4 transition-transform duration-200 ${
+                  isExpanded ? 'rotate-180' : ''
+                }`}
+              />
+            }
+          >
+            {isExpanded ? 'Show Less' : `Show ${validAudioTracks.length - noTracksToShow} More`}
+          </Button>
+        </div>
+      )}
     </section>
   )
 }
