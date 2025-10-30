@@ -11,8 +11,8 @@
     "utils": "@/lib/utils",
     "components": "@/components/admin",
     "ui": "@/components/admin/ui",
-    "hooks": "@/hooks",
-    "lib": "@/lib"
+    "hooks": "@/shared/hooks",
+    "lib": "@/shared/lib"
   },
   "iconLibrary": "lucide"
 }

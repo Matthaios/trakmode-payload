@@ -310,9 +310,7 @@ export function AudioPlayerBlockRenderer({ block }: AudioPlayerBlockProps) {
   return (
     <section id="audio-player-block" className="w-full">
       {/* Title */}
-      {block.title && (
-        <h2 className="text-2xl font-bold text-primary mb-6">{block.title}</h2>
-      )}
+      {block.title && <h2 className="text-2xl font-bold text-primary mb-6">{block.title}</h2>}
 
       {/* Audio Players List */}
       <div className="space-y-4">
