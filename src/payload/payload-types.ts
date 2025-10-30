@@ -167,15 +167,26 @@ export interface User {
   profile?: {
     content?:
       | {
+          /**
+           * Title displayed above the videos
+           */
+          title?: string | null;
           videos?:
             | {
+                /**
+                 * Enter a YouTube video URL. Supports various YouTube URL formats.
+                 */
                 video?: string | null;
                 id?: string | null;
               }[]
             | null;
+          /**
+           * Number of videos shown before collapse (when more videos are available)
+           */
+          collapseCount?: number | null;
           id?: string | null;
           blockName?: string | null;
-          blockType: 'youtube-videos';
+          blockType: 'youtube-video-block';
         }[]
       | null;
   };
@@ -448,15 +459,17 @@ export interface UsersSelect<T extends boolean = true> {
         content?:
           | T
           | {
-              'youtube-videos'?:
+              'youtube-video-block'?:
                 | T
                 | {
+                    title?: T;
                     videos?:
                       | T
                       | {
                           video?: T;
                           id?: T;
                         };
+                    collapseCount?: T;
                     id?: T;
                     blockName?: T;
                   };

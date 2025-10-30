@@ -10,6 +10,7 @@ import { privateField } from '@/payload/utils/fields'
 import { getServerSideURL } from '@/shared/lib/utils/getURL'
 import { revalidateTag } from 'next/cache'
 import { slugField } from '@/payload/fields/slug'
+import { YouTubeVideoBlock } from '@/blocks/youtube-video-block/youtube-video-block.config'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -139,6 +140,9 @@ export const Users: CollectionConfig = {
                   name: 'links',
                   label: false,
                   type: 'group',
+                  admin: {
+                    hideGutter: false,
+                  },
                   fields: [
                     {
                       name: 'website',
@@ -183,22 +187,7 @@ export const Users: CollectionConfig = {
             {
               name: 'content',
               type: 'blocks',
-              blocks: [
-                {
-                  slug: 'youtube-videos',
-                  labels: {
-                    singular: 'Youtube Videos',
-                    plural: 'Youtube Videos',
-                  },
-                  fields: [
-                    {
-                      name: 'videos',
-                      type: 'array',
-                      fields: [{ name: 'video', type: 'text' }],
-                    },
-                  ],
-                },
-              ],
+              blocks: [YouTubeVideoBlock],
             },
           ],
           label: 'Profile',

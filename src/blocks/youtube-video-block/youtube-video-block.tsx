@@ -3,55 +3,18 @@
 import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { Button } from '@/shared/ui/base/buttons/button'
-import type { YouTubeVideoBlock } from '@/features/profile-blocks/ui/model/types'
+import type { YouTubeVideoBlock } from './youtube-video-block.config'
+import { extractYouTubeVideoId, getYouTubeEmbedUrl } from './youtube-utils'
 
-interface YouTubeBlockProps {
+interface YouTubeVideoBlockProps {
   block: YouTubeVideoBlock
-}
-
-/**
- * Extracts YouTube video ID from various URL formats
- * Supports:
- * - https://www.youtube.com/watch?v=VIDEO_ID
- * - https://youtube.com/watch?v=VIDEO_ID
- * - https://www.youtube.com/embed/VIDEO_ID
- * - https://youtu.be/VIDEO_ID
- * - https://youtube.com/embed/VIDEO_ID
- */
-function extractYouTubeVideoId(url: string): string | null {
-  if (!url) return null
-
-  // Handle youtu.be short URLs
-  const shortUrlMatch = url.match(/(?:youtu\.be\/)([a-zA-Z0-9_-]+)/)
-  if (shortUrlMatch) {
-    return shortUrlMatch[1]
-  }
-
-  // Handle youtube.com/watch?v=VIDEO_ID
-  const watchMatch = url.match(/(?:youtube\.com\/watch\?v=)([a-zA-Z0-9_-]+)/)
-  if (watchMatch) {
-    return watchMatch[1]
-  }
-
-  // Handle youtube.com/embed/VIDEO_ID
-  const embedMatch = url.match(/(?:youtube\.com\/embed\/)([a-zA-Z0-9_-]+)/)
-  if (embedMatch) {
-    return embedMatch[1]
-  }
-
-  // If it's already just a video ID, return it
-  if (/^[a-zA-Z0-9_-]+$/.test(url)) {
-    return url
-  }
-
-  return null
 }
 
 /**
  * Renders a single YouTube video embed
  */
 function YouTubeEmbed({ videoId }: { videoId: string }) {
-  const embedUrl = `https://www.youtube.com/embed/${videoId}`
+  const embedUrl = getYouTubeEmbedUrl(videoId)
 
   return (
     <div className="relative w-full shrink-0" style={{ aspectRatio: '16/9' }}>
@@ -73,7 +36,7 @@ function YouTubeEmbed({ videoId }: { videoId: string }) {
  * - Desktop: Grid layout (2 columns)
  * - Collapsible: Shows first 4 videos by default when there are more than 4
  */
-export function YouTubeBlock({ block }: YouTubeBlockProps) {
+export function YouTubeVideoBlockRenderer({ block }: YouTubeVideoBlockProps) {
   const [isExpanded, setIsExpanded] = useState(false)
 
   if (!block.videos || block.videos.length === 0) {
@@ -91,14 +54,15 @@ export function YouTubeBlock({ block }: YouTubeBlockProps) {
   if (validVideos.length === 0) {
     return null
   }
-  const noVideosToShow = 4
+
+  const noVideosToShow = block.collapseCount || 4
   const hasMoreThanFour = validVideos.length > noVideosToShow
   const videosToShow =
     hasMoreThanFour && !isExpanded ? validVideos.slice(0, noVideosToShow) : validVideos
 
   return (
-    <section id="youtube-videos" className="space-y-6">
-      <h2 className="text-2xl font-bold text-primary">Featured Videos</h2>
+    <section id="youtube-video-block" className="space-y-6">
+      <h2 className="text-2xl font-bold text-primary">{block.title || 'Featured Videos'}</h2>
 
       {/* Mobile Carousel */}
       <div className="md:hidden">

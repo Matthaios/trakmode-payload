@@ -1,0 +1,99 @@
+---
+description: Use when creating new or updating the existing payload blocks.
+alwaysApply: false
+---
+
+# Block Structure Specification
+
+## Overview
+
+Blocks in this Payload CMS project follow a consistent structure that separates CMS configuration from frontend presentation. Each block consists of at least two files and optionally an admin subfolder.
+
+## Directory Structure
+
+Blocks are organized in the `src/` directory with each block in its own folder:
+
+```
+src/
+  blocks/
+    block-name/
+      block-name.config.ts
+      block-name.tsx
+      admin/ (optional)
+        CustomAdminComponent.tsx
+        PreviewComponent.tsx
+```
+
+## Required Files
+
+### `block-name.config.ts`
+- **Purpose**: Contains the Payload CMS configuration for the block
+- **Naming**: Kebab-case directory name + `.config.ts`
+- **Contents**:
+  - Block field definitions
+  - Validation rules
+  - Admin interface settings
+  - TypeScript interfaces for the block data
+
+### `block-name.tsx`
+- **Purpose**: React component for frontend rendering of the block
+- **Naming**: Matches the config file name but with `.tsx` extension
+- **Contents**:
+  - React component that receives block data as props
+  - Frontend styling and layout
+  - Client-side interactions
+
+## Optional Files
+
+### `admin/` Subfolder
+- **Purpose**: Contains custom components used within the Payload CMS admin interface
+- **When to use**:
+  - Custom field components
+  - Preview components for the block editor
+  - Admin-specific UI overrides
+- **Naming**: PascalCase component names (e.g., `CustomField.tsx`, `BlockPreview.tsx`)
+
+## Naming Conventions
+
+- **Directories**: kebab-case (e.g., `text-image-block`, `youtube-video-player`)
+- **Config files**: `directory-name.config.ts`
+- **Component files**: `directory-name.tsx`
+- **Admin components**: PascalCase (e.g., `CustomPreview.tsx`)
+
+## Examples
+
+### Simple Text Block
+```
+src/blocks/text-block/
+  text-block.config.ts
+  text-block.tsx
+```
+
+### Complex Media Block with Admin Components
+```
+src/blocks/image-gallery/
+  image-gallery.config.ts
+  image-gallery.tsx
+  admin/
+    GalleryPreview.tsx
+    ImageUploader.tsx
+```
+
+## Guidelines
+
+### When to Create Admin Components
+- Use admin components when the default Payload admin interface doesn't meet your needs
+- For complex block previews that require custom rendering
+- When you need specialized field inputs or validation UI
+
+### Coding Standards
+- Use TypeScript interfaces for all block data structures
+- Follow existing component patterns in the codebase
+- Include proper error handling in both config and component files
+- Use consistent import/export patterns
+
+### Best Practices
+- Keep block logic focused and single-purpose
+- Use the admin folder sparingly - prefer standard Payload fields when possible
+- Ensure blocks are reusable across different page types
+- Test both the CMS configuration and frontend rendering

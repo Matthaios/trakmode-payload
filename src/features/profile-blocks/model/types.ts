@@ -4,15 +4,7 @@
  * and match Payload's generated types
  */
 
-export interface YouTubeVideoBlock {
-  blockType: 'youtube-videos'
-  videos?: Array<{
-    video?: string | null
-    id?: string | null
-  }> | null
-  id?: string | null
-  blockName?: string | null
-}
+import type { YouTubeVideoBlock } from '@/blocks/youtube-video-block/youtube-video-block.config'
 
 /**
  * Union type for all profile block types
@@ -24,4 +16,3 @@ export type ProfileBlock = YouTubeVideoBlock
  * Helper type to extract block type from ProfileBlock union
  */
 export type BlockType = ProfileBlock['blockType']
-

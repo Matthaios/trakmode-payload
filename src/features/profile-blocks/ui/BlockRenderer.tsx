@@ -1,5 +1,5 @@
-import type { ProfileBlock } from '../model/types'
-import { YouTubeBlock } from './blocks/YouTubeBlock'
+import type { ProfileBlock } from '@/features/profile-blocks/model/types'
+import { YouTubeVideoBlockRenderer } from '@/blocks/youtube-video-block/youtube-video-block'
 
 interface BlockRendererProps {
   block: ProfileBlock
@@ -10,7 +10,7 @@ interface BlockRendererProps {
  * Add new block types here as they are implemented
  */
 const blockRenderers = {
-  'youtube-videos': YouTubeBlock,
+  'youtube-video-block': YouTubeVideoBlockRenderer,
 } as const
 
 /**
@@ -47,4 +47,3 @@ export function BlocksRenderer({ blocks }: { blocks: ProfileBlock[] }) {
     </>
   )
 }
-
