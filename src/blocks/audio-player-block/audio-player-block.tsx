@@ -1,23 +1,16 @@
 'use client'
 
-import { useState, useRef, useMemo, useEffect } from 'react'
-import { Play, Pause, ChevronDown } from 'lucide-react'
+import React, { useState } from 'react'
+import { ChevronDown } from 'lucide-react'
 import Image from 'next/image'
 import { Button } from '@/shared/ui/base/buttons/button'
+import { useGlobalAudioPlayer } from '@/features/global-audio-player/model/useGlobalAudioPlayer'
 import type { AudioPlayerBlock } from './audio-player-block.config'
 
 interface AudioPlayerBlockProps {
   block: AudioPlayerBlock
 }
 
-/**
- * Formats seconds into MM:SS format
- */
-function formatTime(seconds: number): string {
-  const minutes = Math.floor(seconds / 60)
-  const secs = Math.floor(seconds % 60)
-  return `${minutes}:${secs.toString().padStart(2, '0')}`
-}
 
 /**
  * Extracts URL from various Payload media formats
@@ -31,149 +24,62 @@ function extractUrl(
   return undefined
 }
 
-/**
- * Play/Pause button component
- * Positioned in top right corner
- */
-function PlayButton({ isPlaying, onClick }: { isPlaying: boolean; onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      className="flex-shrink-0 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50 backdrop-blur-sm"
-      aria-label={isPlaying ? 'Pause' : 'Play'}
-    >
-      {isPlaying ? (
-        <Pause className="w-5 h-5" fill="currentColor" />
-      ) : (
-        <Play className="w-5 h-5 ml-0.5" fill="currentColor" />
-      )}
-    </button>
-  )
-}
 
-/**
- * Waveform visualization component
- * Flexible waveform that fits between title and play button
- */
-function Waveform({
-  progress,
-  heights,
-  onSeek,
-}: {
-  progress: number
-  heights: number[]
-  onSeek: (e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => void
-}) {
-  return (
-    <div className="flex-1 min-w-0">
-      <div
-        className="relative w-full h-14 cursor-pointer group"
-        onClick={onSeek}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault()
-            onSeek(e)
-          }
-        }}
-        aria-label="Seek audio"
-      >
-        <div className="absolute inset-0 flex items-center justify-between" style={{ gap: '1px' }}>
-          {heights.map((barHeight, i) => {
-            const barProgress = i / heights.length
-            const isPlayed = barProgress < progress
-
-            return (
-              <div
-                key={i}
-                className={`transition-all duration-200 ${
-                  isPlayed ? 'bg-white' : 'bg-gray-700 group-hover:bg-gray-600'
-                }`}
-                style={{
-                  flex: '1 1 0%',
-                  minWidth: '1px',
-                  height: `${Math.max(barHeight * 100, 20)}%`,
-                  opacity: isPlayed ? 1 : 0.4,
-                }}
-              />
-            )
-          })}
-        </div>
-      </div>
-    </div>
-  )
-}
 
 /**
  * Thumbnail image component
- * Compact square format similar to album art
+ * Compact square format for list layout
  */
 function Thumbnail({ url, alt }: { url: string; alt: string }) {
   return (
-    <div className="flex-shrink-0 relative w-20 h-20 rounded-lg overflow-hidden border border-gray-800">
-      <Image src={url} alt={alt} fill className="object-cover" sizes="80px" />
+    <div className="flex-shrink-0 relative w-14 h-14 rounded-md overflow-hidden">
+      <Image src={url} alt={alt} fill className="object-cover" sizes="56px" />
     </div>
   )
 }
 
 /**
  * Title section component
- * Displays title (large, prominent) and subtitle (smaller, lighter text below)
+ * Displays title and subtitle (no time display - that's in the global player)
  */
 function TitleSection({
   title,
   subtitle,
-  currentTime,
-  duration,
 }: {
   title: string
   subtitle?: string
-  currentTime?: number
-  duration?: number
 }) {
   return (
     <div className="flex flex-col min-w-0">
       <h3 className="text-base font-medium text-white truncate">{title}</h3>
       {subtitle && <span className="text-xs text-gray-400 truncate">{subtitle}</span>}
-      {duration && duration > 0 && (
-        <div className="text-xs text-white mt-0.5">
-          <span className="tabular-nums">
-            {formatTime(currentTime || 0)} / {formatTime(duration)}
-          </span>
-        </div>
-      )}
     </div>
   )
 }
 
 /**
+ * Formats seconds into MM:SS format
+ */
+function formatDuration(seconds: number): string {
+  const minutes = Math.floor(seconds / 60)
+  const secs = Math.floor(seconds % 60)
+  return `${minutes}:${secs.toString().padStart(2, '0')}`
+}
+
+/**
  * Single audio player component
+ * List layout: Thumbnail, Title/Subtitle, Duration
+ * Clicking anywhere plays in global player
  */
 function SingleAudioPlayer({
   track,
-  isMobile,
-  isPlaying,
-  onPlay,
-  onPause,
-  trackIndex,
+  trackId,
 }: {
   track: NonNullable<AudioPlayerBlock['audioFiles']>[number]
-  isMobile: boolean
-  isPlaying: boolean
-  onPlay: () => void
-  onPause: () => void
-  trackIndex: number
+  trackId: string
 }) {
-  const [currentTime, setCurrentTime] = useState(0)
-  const [duration, setDuration] = useState(0)
-  const audioRef = useRef<HTMLAudioElement>(null)
-
-  // Generate stable waveform bar heights
-  const barCount = isMobile ? 80 : 160
-  const waveformHeights = useMemo(() => {
-    return Array.from({ length: barCount }).map(() => Math.random() * 0.5 + 0.3)
-  }, [barCount])
+  const { play, currentTrack, isPlaying, pause, duration } = useGlobalAudioPlayer()
+  const [trackDuration, setTrackDuration] = useState<number | null>(null)
 
   const audioUrl = extractUrl(track.audioFile)
   const thumbnailUrl = extractUrl(track.thumbnail)
@@ -182,91 +88,67 @@ function SingleAudioPlayer({
     return null
   }
 
-  const progress = duration > 0 ? currentTime / duration : 0
+  const isCurrentlyPlaying = currentTrack?.id === trackId && isPlaying
 
-  const togglePlay = () => {
-    if (!audioRef.current) return
+  // Load duration from audio metadata
+  React.useEffect(() => {
+    if (!audioUrl) return
 
-    if (isPlaying) {
-      audioRef.current.pause()
-      onPause()
+    const audio = new Audio(audioUrl)
+    audio.addEventListener('loadedmetadata', () => {
+      setTrackDuration(audio.duration)
+    })
+    audio.preload = 'metadata'
+
+    return () => {
+      audio.removeEventListener('loadedmetadata', () => {})
+    }
+  }, [audioUrl])
+
+  const handleClick = () => {
+    if (isCurrentlyPlaying) {
+      pause()
     } else {
-      audioRef.current.play()
-      onPlay()
+      play({
+        id: trackId,
+        title: track.trackTitle,
+        artist: track.subtitle,
+        audioUrl,
+        thumbnailUrl,
+      })
     }
   }
 
-  const handleTimeUpdate = () => {
-    if (audioRef.current) {
-      setCurrentTime(audioRef.current.currentTime)
-    }
-  }
-
-  const handleLoadedMetadata = () => {
-    if (audioRef.current) {
-      setDuration(audioRef.current.duration)
-    }
-  }
-
-  const handleSeek = (
-    e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>,
-  ) => {
-    if (!audioRef.current || duration === 0) return
-
-    const rect = e.currentTarget.getBoundingClientRect()
-    const x = 'clientX' in e ? e.clientX - rect.left : rect.width / 2
-    const clickRatio = x / rect.width
-    const newTime = clickRatio * duration
-
-    audioRef.current.currentTime = newTime
-    setCurrentTime(newTime)
-  }
-
-  // Pause when another track starts playing
-  useEffect(() => {
-    if (!isPlaying && audioRef.current) {
-      audioRef.current.pause()
-    }
-  }, [isPlaying])
+  // Use current track duration if this is the playing track, otherwise use loaded duration
+  const displayDuration = isCurrentlyPlaying && duration > 0
+    ? duration
+    : trackDuration
 
   return (
-    <div className="bg-gray-900 rounded-xl p-4 border border-gray-800">
-      {/* Single row: Thumbnail, Title/Subtitle/Time, Waveform, Play button */}
-      <div className="flex items-center gap-4">
-        {/* Thumbnail */}
-        {thumbnailUrl && <Thumbnail url={thumbnailUrl} alt={track.trackTitle} />}
+    <button
+      onClick={handleClick}
+      className={`w-full flex items-center gap-4 px-4 py-3 hover:bg-gray-800/50 transition-colors ${
+        isCurrentlyPlaying ? 'bg-[#6869DE]/20' : ''
+      }`}
+      aria-label={`Play ${track.trackTitle}`}
+    >
+      {/* Thumbnail */}
+      {thumbnailUrl ? (
+        <Thumbnail url={thumbnailUrl} alt={track.trackTitle} />
+      ) : (
+        <div className="flex-shrink-0 w-14 h-14 rounded-md bg-gray-700" />
+      )}
 
-        {/* Title Section with time display below - takes only needed space */}
-        <div className="flex-shrink-0">
-          <TitleSection
-            title={track.trackTitle}
-            subtitle={track.subtitle}
-            currentTime={currentTime}
-            duration={duration}
-          />
-        </div>
-
-        {/* Waveform bars - fills remaining space */}
-        {duration > 0 && (
-          <Waveform progress={progress} heights={waveformHeights} onSeek={handleSeek} />
-        )}
-
-        {/* Play Button on the right, vertically centered */}
-        <div className="flex-shrink-0">
-          <PlayButton isPlaying={isPlaying} onClick={togglePlay} />
-        </div>
+      {/* Title and Subtitle - takes remaining space */}
+      <div className="flex-1 min-w-0 text-left">
+        <TitleSection title={track.trackTitle} subtitle={track.subtitle} />
       </div>
 
-      {/* Hidden audio element */}
-      <audio
-        ref={audioRef}
-        src={audioUrl}
-        onTimeUpdate={handleTimeUpdate}
-        onLoadedMetadata={handleLoadedMetadata}
-        onEnded={() => onPause()}
-        preload="metadata"
-      />
-    </div>
+      {/* Duration on the right */}
+      <div className="flex-shrink-0 text-sm text-gray-400 tabular-nums">
+        {displayDuration ? formatDuration(displayDuration) : '--:--'}
+      </div>
+    </button>
   )
 }
 
@@ -276,20 +158,6 @@ function SingleAudioPlayer({
  */
 export function AudioPlayerBlockRenderer({ block }: AudioPlayerBlockProps) {
   const [isExpanded, setIsExpanded] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-  const [currentlyPlayingIndex, setCurrentlyPlayingIndex] = useState<number | null>(null)
-
-  // Detect mobile screen size
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
-
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
 
   if (!block.audioFiles || block.audioFiles.length === 0) {
     return null
@@ -313,24 +181,21 @@ export function AudioPlayerBlockRenderer({ block }: AudioPlayerBlockProps) {
       {block.title && <h2 className="text-2xl font-bold text-primary mb-6">{block.title}</h2>}
 
       {/* Audio Players List */}
-      <div className="space-y-4">
-        {validAudioTracks.map((track, index) => {
-          // Only render tracks that should be visible
-          const isVisible = !hasMoreThanCount || isExpanded || index < noTracksToShow
-          if (!isVisible) return null
+      <div className="rounded-xl border border-gray-800 bg-gray-900 overflow-hidden">
+        <div className="divide-y divide-gray-800">
+          {validAudioTracks.map((track, index) => {
+            // Only render tracks that should be visible
+            const isVisible = !hasMoreThanCount || isExpanded || index < noTracksToShow
+            if (!isVisible) return null
 
-          return (
-            <SingleAudioPlayer
-              key={track.id || index}
-              track={track}
-              isMobile={isMobile}
-              isPlaying={currentlyPlayingIndex === index}
-              onPlay={() => setCurrentlyPlayingIndex(index)}
-              onPause={() => setCurrentlyPlayingIndex(null)}
-              trackIndex={index}
-            />
-          )
-        })}
+            // Generate a unique ID for this track
+            const trackId = track.id || `track-${block.blockName || 'default'}-${index}`
+
+            return (
+              <SingleAudioPlayer key={trackId} track={track} trackId={trackId} />
+            )
+          })}
+        </div>
       </div>
 
       {/* Show More/Less Button */}
