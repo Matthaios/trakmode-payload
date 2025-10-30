@@ -37,6 +37,9 @@ export function GlobalAudioPlayer() {
   const sliderRef = useRef<HTMLDivElement>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [dragTime, setDragTime] = useState<number | null>(null)
+  const [isScrolledDown, setIsScrolledDown] = useState(true)
+  const lastScrollY = useRef(0)
+  const scrollTimeout = useRef<NodeJS.Timeout | null>(null)
 
   // Use dragTime when dragging, otherwise use currentTime
   const displayTime = isDragging && dragTime !== null ? dragTime : currentTime
@@ -92,13 +95,64 @@ export function GlobalAudioPlayer() {
     }
   }, [currentTime, isDragging])
 
+  // Handle scroll direction for show/hide
+  useEffect(() => {
+    if (!isVisible || !isPlaying) {
+      // Always show when not playing or not visible
+      setIsScrolledDown(true)
+      return
+    }
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+
+      // Clear any existing timeout
+      if (scrollTimeout.current) {
+        clearTimeout(scrollTimeout.current)
+      }
+
+      // Only hide/show if scrolling
+      if (Math.abs(currentScrollY - lastScrollY.current) > 5) {
+        if (currentScrollY > lastScrollY.current) {
+          // Scrolling down - show player
+          setIsScrolledDown(true)
+        } else if (currentScrollY < lastScrollY.current) {
+          // Scrolling up - hide player
+          setIsScrolledDown(false)
+        }
+        lastScrollY.current = currentScrollY
+      }
+
+      // Auto-show after a delay if user stops scrolling
+      scrollTimeout.current = setTimeout(() => {
+        setIsScrolledDown(true)
+      }, 1500)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      if (scrollTimeout.current) {
+        clearTimeout(scrollTimeout.current)
+      }
+    }
+  }, [isVisible, isPlaying])
+
   if (!isVisible || !currentTrack) {
     return null
   }
 
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-[#0B0B0D] border-t border-gray-800 shadow-lg">
+    <div
+      className={`fixed bottom-0 left-0 right-0 z-50 bg-[#0B0B0D]/95 backdrop-blur-lg border-t border-gray-800/50 shadow-2xl transition-transform duration-300 ${
+        isScrolledDown ? 'translate-y-0' : 'translate-y-full'
+      }`}
+      style={{
+        boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.5), 0 0 1px rgba(255, 255, 255, 0.1)',
+      }}
+    >
       <div className="px-4 sm:px-8 py-3 sm:py-4">
         <div className="flex items-center gap-4 sm:gap-6 w-full">
           {/* Left: Album Art and Track Info - Hidden on mobile */}
